@@ -6,6 +6,7 @@
         <module>ruoyi-web</module>
         <module>ruoyi-common</module>
         <module>ruoyi-framework</module>
+        <module>ruoyi-system</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

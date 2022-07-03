@@ -23,13 +23,13 @@ public class CaptchaConfig {
     @Autowired
     private CaptchaProperties captchaProperties;
 
-    @ConditionalOnProperty(prefix = "ruoyi.user", name = "captchaType", havingValue = "math", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "ruoyi.captcha", name = "captchaType", havingValue = "math", matchIfMissing = true)
     @Bean
     public CodeGenerator mathGenerator() {
         return new MathGenerator(1);
     }
 
-    @ConditionalOnProperty(prefix = "ruoyi.user", name = "captchaType", havingValue = "code")
+    @ConditionalOnProperty(prefix = "ruoyi.captcha", name = "captchaType", havingValue = "code")
     @Bean
     public CodeGenerator codeGenerator() {
         return new RandomGenerator(captchaProperties.getCodeBaseStr(), captchaProperties.getCodeLength());

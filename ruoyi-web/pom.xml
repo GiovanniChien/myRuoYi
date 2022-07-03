@@ -36,6 +36,11 @@
             <artifactId>ruoyi-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.chien</groupId>
+            <artifactId>ruoyi-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
