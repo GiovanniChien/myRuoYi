@@ -975,11 +975,8 @@ varchar(100) default ''
 varchar(20) default ''
 手机号码</title></a>
 <text x='792' y='198' text-anchor='end' class='colType'>t</text>  <a xlink:href='#sys_user.password'><text id='ry.sys_user.password' x='708' y='216'>password</text><title>password
-varchar(100) default ''
+varchar(128) default ''
 密码</title></a>
-<text x='792' y='213' text-anchor='end' class='colType'>t</text>  <a xlink:href='#sys_user.salt'><text id='ry.sys_user.salt' x='708' y='231'>salt</text><title>salt
-varchar(100) default ''
-盐加密</title></a>
 <text x='792' y='228' text-anchor='end' class='colType'>t</text>  <a xlink:href='#sys_user.user_type'><text id='ry.sys_user.user_type' x='708' y='246'>user_type</text><title>user_type
 char(1) default 'N'
 类型:Y默认用户,N非默认用户</title></a>
@@ -2702,14 +2699,8 @@ varchar(1)</title></a>
 	<tr>
 		<td>&nbsp;</td>
 		<td><a name='sys_user.password'>password</a></td>
-		<td> varchar&#40; 100 &#41;   DEFAULT '' </td>
+		<td> varchar&#40; 128 &#41;   DEFAULT '' </td>
 		<td> 密码 </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='sys_user.salt'>salt</a></td>
-		<td> varchar&#40; 100 &#41;   DEFAULT '' </td>
-		<td> 盐加密 </td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

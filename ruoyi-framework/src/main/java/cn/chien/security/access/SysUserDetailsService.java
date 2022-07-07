@@ -3,6 +3,7 @@ package cn.chien.security.access;
 import cn.chien.constant.UserConstants;
 import cn.chien.domain.SysRole;
 import cn.chien.domain.SysUser;
+import cn.chien.enums.UserStatus;
 import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.DateUtils;
@@ -37,18 +38,21 @@ public class SysUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserService.selectUserByLoginName(username);
+        if (sysUser == null) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
         return createUser(sysUser);
     }
 
     private User createUser(SysUser sysUser) {
         boolean enabled = UserConstants.NORMAL.equals(sysUser.getStatus());
-        boolean credentialsNonExpired = !checkAccountExpired(sysUser.getPwdUpdateDate());
+        boolean accountNonExpired = UserStatus.OK.getCode().equals(sysUser.getDelFlag());
         List<SysRole> roles = sysUser.getRoles();
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (SysRole role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleKey()));
         }
-        return new User(sysUser.getLoginName(), sysUser.getPassword(), enabled, true, credentialsNonExpired, true, authorities);
+        return new User(sysUser.getLoginName(), sysUser.getPassword(), enabled, accountNonExpired, true, true, authorities);
     }
 
     private boolean checkAccountExpired(Date pwdUpdateDate) {

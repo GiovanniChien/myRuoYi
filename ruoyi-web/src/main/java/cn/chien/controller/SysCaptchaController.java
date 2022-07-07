@@ -1,5 +1,6 @@
 package cn.chien.controller;
 
+import cn.chien.annotation.SkipSessionCheck;
 import cn.chien.constant.CaptchaConstant;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.CodeGenerator;
@@ -24,6 +25,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/captcha")
+@SkipSessionCheck
 public class SysCaptchaController {
 
     @Autowired

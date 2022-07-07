@@ -2407,20 +2407,7 @@ LABL 0 新宋体,8,N</a:FontList>
 <a:Comment>密码</a:Comment>
 <a:DefaultValue>&#39;&#39;</a:DefaultValue>
 <a:DataType>varchar(100)</a:DataType>
-<a:Length>100</a:Length>
-</o:Column>
-<o:Column Id="o67">
-<a:ObjectID>53E6BB49-3435-46E0-832F-BCAFE1A021CB</a:ObjectID>
-<a:Name>salt</a:Name>
-<a:Code>salt</a:Code>
-<a:CreationDate>1524449375</a:CreationDate>
-<a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1524449375</a:ModificationDate>
-<a:Modifier>Administrator</a:Modifier>
-<a:Comment>盐加密</a:Comment>
-<a:DefaultValue>&#39;&#39;</a:DefaultValue>
-<a:DataType>varchar(100)</a:DataType>
-<a:Length>100</a:Length>
+<a:Length>128</a:Length>
 </o:Column>
 <o:Column Id="o68">
 <a:ObjectID>245CAD53-B33B-4EED-8CFA-7AA10ED943B8</a:ObjectID>

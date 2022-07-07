@@ -25,7 +25,7 @@ function login() {
         url: ctx + "login",
         data: {
             "username": username,
-            "password": password,
+            "password": btoa(password),
             "validateCode": validateCode,
             "rememberMe": rememberMe
         },

@@ -1,15 +1,16 @@
 package cn.chien.security.config;
 
+import cn.chien.properties.SecurityProperties;
+import cn.chien.security.access.FormLoginAuthenticationFailureHandler;
 import cn.chien.security.access.FormLoginAuthenticationProvider;
+import cn.chien.security.access.FormLoginAuthenticationSuccessHandler;
+import cn.chien.security.filter.VerificationCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -23,6 +24,15 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
 
     @Autowired
     private FormLoginAuthenticationProvider formLoginAuthenticationProvider;
+
+    @Autowired
+    private SecurityProperties securityProperties;
+
+    @Autowired
+    private FormLoginAuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private FormLoginAuthenticationFailureHandler authenticationFailureHandler;
 
     protected FormLoginAutoConfiguration() {
         super(true);
@@ -40,20 +50,22 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
             .and().securityContext()
             .and().anonymous()
             .and().formLogin()
-//                .authenticationDetailsSource(this.authenticationDetailsSource)
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .permitAll()
-//                .successHandler(this.authenticationSuccessHandler)
-//                .failureHandler(this.authenticationFailureHandler)
+                .successHandler(this.authenticationSuccessHandler)
+                .failureHandler(this.authenticationFailureHandler)
             .and().logout().invalidateHttpSession(true)
                 .deleteCookies("SESSION")
 //                .addLogoutHandler(portalLogoutHandler)
             .and().authorizeRequests()
                 .anyRequest().authenticated()
             .and()
-//                .addFilterBefore(portalVerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().and().cors();
+        http.sessionManagement().sessionFixation().migrateSession()
+                .maximumSessions(securityProperties.getSession().getMaxSession())
+                .maxSessionsPreventsLogin(!securityProperties.getSession().getKickOutAfter());
     }
 
     @Override

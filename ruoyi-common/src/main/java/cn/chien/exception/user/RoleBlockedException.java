@@ -5,9 +5,7 @@ package cn.chien.exception.user;
  * 
  * @author ruoyi
  */
-public class RoleBlockedException extends UserException
-{
-    private static final long serialVersionUID = 1L;
+public class RoleBlockedException extends UserException {
 
     public RoleBlockedException()
     {

@@ -32,8 +32,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
                 .and().exceptionHandling()
                 .authenticationEntryPoint(this.accessEntryPoint)
                 .accessDeniedHandler(customAccessDeniedHandler)
-                .and().authorizeRequests().anyRequest()
-                .access("@urlAccessControl.check(authentication, request)")
+                .and().authorizeRequests((requests) -> requests.filterSecurityInterceptorOncePerRequest(false))
+                .authorizeRequests().anyRequest().access("@urlAccessControl.check(authentication, request)")
                 .and().servletApi()
                 .and().cors();
     }
