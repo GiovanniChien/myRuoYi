@@ -1,12 +1,14 @@
 package cn.chien.session.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.session.MapSessionRepository;
 import org.springframework.session.SessionRepository;
+import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,7 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2022/7/4
  */
 @Configuration
-public class SessionConfiguration {
+@ConditionalOnProperty(prefix = "spring.session", name = "store-type", havingValue = "none", matchIfMissing = true)
+@EnableSpringHttpSession
+public class MapSessionConfiguration {
 
     @Bean
     @ConditionalOnMissingBean({SessionRegistry.class})

@@ -4,6 +4,7 @@ import cn.chien.constant.UserConstants;
 import cn.chien.domain.SysRole;
 import cn.chien.domain.SysUser;
 import cn.chien.enums.UserStatus;
+import cn.chien.security.common.Logins;
 import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.DateUtils;
@@ -52,6 +53,7 @@ public class SysUserDetailsService implements UserDetailsService {
         for (SysRole role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleKey()));
         }
+        Logins.LOGIN_USER.set(sysUser);
         return new User(sysUser.getLoginName(), sysUser.getPassword(), enabled, accountNonExpired, true, true, authorities);
     }
 

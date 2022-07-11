@@ -8,6 +8,7 @@ import cn.chien.security.filter.VerificationCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -46,7 +47,9 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.setSharedObject(RequestCache.class, new NullRequestCache());
-        http.requestMatchers().antMatchers("/login", "/logout")
+        http.requestMatchers()
+                .antMatchers(HttpMethod.POST, "/login")
+                .antMatchers(HttpMethod.GET, "/logout")
             .and().securityContext()
             .and().anonymous()
             .and().formLogin()
@@ -65,7 +68,7 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
                 .exceptionHandling().and().cors();
         http.sessionManagement().sessionFixation().migrateSession()
                 .maximumSessions(securityProperties.getSession().getMaxSession())
-                .maxSessionsPreventsLogin(!securityProperties.getSession().getKickOutAfter());
+                .maxSessionsPreventsLogin(securityProperties.getSession().getKickOutAfter());
     }
 
     @Override

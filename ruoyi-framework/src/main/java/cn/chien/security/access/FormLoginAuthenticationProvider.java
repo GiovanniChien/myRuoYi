@@ -3,8 +3,8 @@ package cn.chien.security.access;
 import cn.chien.constant.UserConstants;
 import cn.chien.domain.SysUser;
 import cn.chien.properties.SecurityProperties;
+import cn.chien.security.common.Logins;
 import cn.chien.security.exception.PasswordRetryLimitExceedException;
-import cn.chien.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,9 +29,6 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
 
     @Autowired
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    private ISysUserService sysUserService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -62,7 +59,7 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
         }
 
         // 查询用户信息
-        SysUser user = sysUserService.selectUserByLoginName(username);
+        SysUser user = Logins.LOGIN_USER.get();
 
         if (user == null)
         {
@@ -85,18 +82,7 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
         boolean matches = passwordEncoder.matches(password, userDetails.getPassword());
 
         check(matches, user);
-
-//        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
-//        recordLoginInfo(user.getUserId());
     }
-
-//    private void recordLoginInfo(Long userId) {
-//        SysUser user = new SysUser();
-//        user.setUserId(userId);
-//        user.setLoginIp();
-//        user.setLoginDate(DateUtils.getNowDate());
-//        sysUserService.updateUserInfo(user);
-//    }
 
     private void check(boolean matches, SysUser user) throws AuthenticationException {
         String loginName = user.getLoginName();

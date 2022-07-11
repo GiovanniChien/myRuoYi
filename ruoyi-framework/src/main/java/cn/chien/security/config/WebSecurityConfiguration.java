@@ -1,7 +1,9 @@
 package cn.chien.security.config;
 
+import cn.chien.properties.SecurityProperties;
 import cn.chien.security.error.AccessEntryPoint;
 import cn.chien.security.error.CustomAccessDeniedHandler;
+import cn.chien.session.config.CustomSessionInformationExpiredStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -21,6 +23,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
     private AccessEntryPoint accessEntryPoint;
 
     @Autowired
+    private SecurityProperties securityProperties;
+
+    @Autowired
+    private CustomSessionInformationExpiredStrategy customSessionInformationExpiredStrategy;
+
+    @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Override
@@ -36,6 +44,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
                 .authorizeRequests().anyRequest().access("@urlAccessControl.check(authentication, request)")
                 .and().servletApi()
                 .and().cors();
+        http.sessionManagement().sessionFixation().migrateSession()
+                .maximumSessions(securityProperties.getSession().getMaxSession())
+                .maxSessionsPreventsLogin(securityProperties.getSession().getKickOutAfter())
+                .expiredSessionStrategy(customSessionInformationExpiredStrategy);
     }
 
     @Override

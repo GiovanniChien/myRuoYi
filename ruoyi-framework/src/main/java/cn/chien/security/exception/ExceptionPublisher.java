@@ -22,6 +22,10 @@ public class ExceptionPublisher {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    public void process(Exception e, HttpRequestResponseHolder holder) throws IOException {
+        process(e, holder, HttpStatus.OK);
+    }
+
     public void process(Exception e, HttpRequestResponseHolder holder, HttpStatus httpStatus)
             throws IOException {
         HttpServletResponse response = holder.getResponse();

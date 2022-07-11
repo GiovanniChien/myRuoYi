@@ -1,5 +1,6 @@
 package cn.chien.controller;
 
+import cn.chien.annotation.SkipSessionCheck;
 import cn.chien.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2022/7/2
  */
 @Controller
+@SkipSessionCheck
 public class SysLoginController {
 
     @Autowired
