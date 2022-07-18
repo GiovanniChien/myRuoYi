@@ -1,5 +1,6 @@
 package cn.chien.security.access;
 
+import cn.chien.cache.CacheClient;
 import cn.chien.constant.UserConstants;
 import cn.chien.domain.SysUser;
 import cn.chien.enums.CacheNameSpace;
@@ -7,8 +8,6 @@ import cn.chien.properties.SecurityProperties;
 import cn.chien.security.common.Logins;
 import cn.chien.security.exception.PasswordRetryLimitExceedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -19,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -38,9 +35,6 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
 
     @Autowired
     private SecurityProperties securityProperties;
-
-    @Autowired
-    private CacheManager cacheManager;
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
@@ -90,13 +84,12 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
     private void check(boolean matches, SysUser user) throws AuthenticationException {
         String loginName = user.getLoginName();
 
-        Cache cache = cacheManager.getCache(CacheNameSpace.LOGIN_RECORD_CACHE.namespace());
-        AtomicInteger retryCount = cache.get(loginName, AtomicInteger.class);
+        AtomicInteger retryCount = CacheClient.get(CacheNameSpace.LOGIN_RECORD_CACHE.namespace(), loginName, AtomicInteger.class);
 
         if (retryCount == null)
         {
             retryCount = new AtomicInteger(0);
-            cache.put(loginName, retryCount);
+            CacheClient.put(CacheNameSpace.LOGIN_RECORD_CACHE.namespace(), loginName, retryCount);
         }
         if (retryCount.incrementAndGet() > securityProperties.getUser().getPassword().getMaxRetryCount()) {
 //            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.retry.limit.exceed", maxRetryCount)));
@@ -105,11 +98,11 @@ public class FormLoginAuthenticationProvider extends AbstractUserDetailsAuthenti
 
         if (!matches) {
 //            AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.retry.limit.count", retryCount)));
-            cache.put(loginName, retryCount);
+            CacheClient.put(CacheNameSpace.LOGIN_RECORD_CACHE.namespace(), loginName, retryCount);
             throw new BadCredentialsException("密码不匹配");
         }
         else {
-            cache.evictIfPresent(loginName);
+            CacheClient.evictIfPresent(CacheNameSpace.LOGIN_RECORD_CACHE.namespace(), loginName);
         }
     }
 
