@@ -2,6 +2,7 @@ package cn.chien.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,9 +48,17 @@ public class SecurityProperties {
 
         private String path;
 
-        private String httpOnly;
+        private Boolean httpOnly;
 
         private Integer maxAge;
+
+        private Boolean secure;
+
+        private String name;
+
+        private org.springframework.boot.web.server.Cookie.SameSite sameSite;
+
+        private Boolean useBase64;
     }
 
     @Data

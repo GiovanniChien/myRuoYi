@@ -12,7 +12,6 @@ spring:
         min-idle: 0
     timeout: 2000
   session:
-    store-type: redis
     redis:
       connection:
         database: 0
@@ -25,3 +24,4 @@ spring:
             max-idle: 8
             min-idle: 0
         timeout: 2000
+      namespace: spring:session:ruoyi

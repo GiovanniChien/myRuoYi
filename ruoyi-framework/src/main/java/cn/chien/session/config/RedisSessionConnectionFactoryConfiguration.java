@@ -1,6 +1,6 @@
 package cn.chien.session.config;
 
-import cn.chien.redis.LettuceConnectionFactoryBuilder;
+import cn.chien.cache.redis.LettuceConnectionFactoryBuilder;
 import cn.chien.session.properties.RedisSessionConnectFactoryProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,7 +15,7 @@ import org.springframework.session.data.redis.config.annotation.SpringSessionRed
  * @date 2022/7/11
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = "spring.session", name = "store-type", havingValue = "redis")
+@ConditionalOnProperty(prefix = "security.session", name = "store-type", havingValue = "redis")
 @EnableConfigurationProperties(RedisSessionConnectFactoryProperties.class)
 public class RedisSessionConnectionFactoryConfiguration {
 

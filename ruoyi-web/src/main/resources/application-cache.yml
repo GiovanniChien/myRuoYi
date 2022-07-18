@@ -1,0 +1,15 @@
+spring:
+  cache:
+    # 缓存存储策略，支持CAFFEINE和REDIS两种方式
+    type: REDIS
+    # 配置不同名空间下缓存的表现
+    manager:
+        # 缓存名称
+      - namespace: default
+        # 缓存value的最大存活时间，或不配置则默认永不失效
+        maxInterval: 3600
+        # 缓存有效期是否每次访问后刷新，只针对caffeine有效，默认访问缓存后不刷新ttl
+        refreshTtlAfterAccess: false
+      - namespace: loginRecordCache
+        maxInterval: ${security.user.password.lockTime:600}
+        refreshTtlAfterAccess: false

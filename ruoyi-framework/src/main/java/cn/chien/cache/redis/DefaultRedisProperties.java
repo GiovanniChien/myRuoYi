@@ -1,4 +1,4 @@
-package cn.chien.redis;
+package cn.chien.cache.redis;
 
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;

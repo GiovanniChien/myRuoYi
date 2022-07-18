@@ -57,7 +57,7 @@ public class FormLoginAuthenticationFailureHandler implements AuthenticationFail
                 throw new ExceedSessionLimitException();
             }
             else if (PasswordRetryLimitExceedException.class.isAssignableFrom(exception.getClass())) {
-                throw new UserPasswordRetryLimitExceedException(securityProperties.getUser().getPassword().getMaxRetryCount(), securityProperties.getUser().getPassword().getLockTime());
+                throw new UserPasswordRetryLimitExceedException(securityProperties.getUser().getPassword().getMaxRetryCount(), securityProperties.getUser().getPassword().getLockTime() / 60);
             }
         }
         catch (UserException e) {

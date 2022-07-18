@@ -1,5 +1,7 @@
 package cn.chien.session.config;
 
+import cn.chien.properties.SecurityProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +19,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2022/7/4
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.session", name = "store-type", havingValue = "none", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "security.session", name = "store-type", havingValue = "none", matchIfMissing = true)
 @EnableSpringHttpSession
 public class MapSessionConfiguration {
+
+    private static final Integer maxInactiveInterval = 1800;
+
+    private SecurityProperties securityProperties;
 
     @Bean
     @ConditionalOnMissingBean({SessionRegistry.class})
@@ -31,11 +37,17 @@ public class MapSessionConfiguration {
     @ConditionalOnMissingBean({SessionRepository.class})
     public MapSessionRepository sessionRepository() {
         MapSessionRepository sessionRepository = new MapSessionRepository(new ConcurrentHashMap());
-        sessionRepository.setDefaultMaxInactiveInterval(3600);
+        sessionRepository.setDefaultMaxInactiveInterval(
+                securityProperties.getSession().getExpireTime() == null ? maxInactiveInterval : securityProperties.getSession().getExpireTime() * 60);
         return sessionRepository;
     }
 
-//    @Bean
+    @Autowired
+    public void setSecurityProperties(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
+    //    @Bean
 //    @ConditionalOnMissingBean({CookieSerializer.class})
 //    public CookieSerializer cookieSerializer(SecurityProperties securityProperties) {
 //        DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();

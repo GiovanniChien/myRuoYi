@@ -1,4 +1,4 @@
-package cn.chien.redis;
+package cn.chien.cache.redis;
 
 import cn.chien.session.config.RedisSessionConfiguration;
 import io.lettuce.core.ClientOptions;

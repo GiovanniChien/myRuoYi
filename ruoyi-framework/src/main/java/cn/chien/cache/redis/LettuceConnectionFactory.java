@@ -1,4 +1,4 @@
-package cn.chien.redis;
+package cn.chien.cache.redis;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 

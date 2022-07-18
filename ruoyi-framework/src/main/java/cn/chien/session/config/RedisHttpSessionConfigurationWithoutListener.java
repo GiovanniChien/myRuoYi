@@ -16,6 +16,7 @@
 
 package cn.chien.session.config;
 
+import cn.chien.properties.SecurityProperties;
 import cn.chien.session.annotation.EnableRedisHttpSessionWithoutListener;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.session.RedisSessionProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.context.annotation.Bean;
@@ -80,7 +83,8 @@ import java.util.stream.Collectors;
  * @since 1.0
  * @see EnableRedisHttpSession
  */
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(RedisSessionProperties.class)
 public class RedisHttpSessionConfigurationWithoutListener extends SpringHttpSessionConfiguration
 		implements BeanClassLoaderAware, EmbeddedValueResolverAware, ImportAware {
 
@@ -116,6 +120,10 @@ public class RedisHttpSessionConfigurationWithoutListener extends SpringHttpSess
 
 	private StringValueResolver embeddedValueResolver;
 
+	private SecurityProperties securityProperties;
+
+	private RedisSessionProperties redisSessionProperties;
+
 	@Bean
 	public RedisIndexedSessionRepository sessionRepository() {
 		RedisTemplate<Object, Object> redisTemplate = createRedisTemplate();
@@ -127,10 +135,9 @@ public class RedisHttpSessionConfigurationWithoutListener extends SpringHttpSess
 		if (this.defaultRedisSerializer != null) {
 			sessionRepository.setDefaultSerializer(this.defaultRedisSerializer);
 		}
-		sessionRepository.setDefaultMaxInactiveInterval(this.maxInactiveIntervalInSeconds);
-		if (StringUtils.hasText(this.redisNamespace)) {
-			sessionRepository.setRedisKeyNamespace(this.redisNamespace);
-		}
+		sessionRepository.setDefaultMaxInactiveInterval(
+				securityProperties.getSession().getExpireTime() == null ? this.maxInactiveIntervalInSeconds : securityProperties.getSession().getExpireTime() * 60);
+		sessionRepository.setRedisKeyNamespace(redisSessionProperties.getNamespace() == null ? this.redisNamespace : redisSessionProperties.getNamespace());
 		sessionRepository.setFlushMode(this.flushMode);
 		sessionRepository.setSaveMode(this.saveMode);
 		int database = resolveDatabase();
@@ -221,6 +228,16 @@ public class RedisHttpSessionConfigurationWithoutListener extends SpringHttpSess
 	@Autowired
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
+	@Autowired
+	public void setSecurityProperties(SecurityProperties securityProperties) {
+		this.securityProperties = securityProperties;
+	}
+
+	@Autowired
+	public void setRedisSessionProperties(RedisSessionProperties redisSessionProperties) {
+		this.redisSessionProperties = redisSessionProperties;
 	}
 
 	@Autowired(required = false)
