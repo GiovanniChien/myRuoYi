@@ -1,10 +1,10 @@
 package cn.chien.session.config;
 
 import cn.chien.session.annotation.EnableRedisHttpSessionWithoutListener;
+import cn.chien.session.jackson.SecurityJackson2JsonRedisSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
@@ -18,7 +18,7 @@ public class RedisSessionConfiguration {
 
     @Bean("springSessionDefaultRedisSerializer")
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer();
+        return new SecurityJackson2JsonRedisSerializer();
     }
 
 }

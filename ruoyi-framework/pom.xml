@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>cn.chien</groupId>
-            <artifactId>ruoyi-system</artifactId>
+            <artifactId>ruoyi-system-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

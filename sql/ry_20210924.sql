@@ -19,6 +19,7 @@ create table sys_dept (
   update_time       datetime                                   comment '更新时间',
   primary key (dept_id)
 ) engine=innodb auto_increment=200 comment = '部门表';
+ALTER TABLE sys_dept CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 初始化-部门表数据
@@ -62,12 +63,13 @@ create table sys_user (
   remark            varchar(500)    default null               comment '备注',
   primary key (user_id)
 ) engine=innodb auto_increment=100 comment = '用户信息表';
+ALTER TABLE sys_user CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(1,  103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '29c67a30398638269fe600f73a054934', '111111', '0', '0', '127.0.0.1', sysdate(), sysdate(), 'admin', sysdate(), '', null, '管理员');
-insert into sys_user values(2,  105, 'ry',    '若依', '00', 'ry@qq.com',  '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', sysdate(), sysdate(), 'admin', sysdate(), '', null, '测试员');
+insert into sys_user values(1,  103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$XW9zfInKwcUpDBci9dOS1.PcKXkpp0QWhNdyK5GslmKj.lPE8GrHS', '0', '0', '127.0.0.1', sysdate(), sysdate(), 'admin', sysdate(), '', null, '管理员');
+insert into sys_user values(2,  105, 'ry',    '若依', '00', 'ry@qq.com',  '15666666666', '1', '', '$2a$10$XW9zfInKwcUpDBci9dOS1.PcKXkpp0QWhNdyK5GslmKj.lPE8GrHS', '0', '0', '127.0.0.1', sysdate(), sysdate(), 'admin', sysdate(), '', null, '测试员');
 
 
 -- ----------------------------
@@ -88,7 +90,7 @@ create table sys_post
   remark        varchar(500)    default null               comment '备注',
   primary key (post_id)
 ) engine=innodb comment = '岗位信息表';
-
+ALTER TABLE sys_post CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-岗位信息表数据
 -- ----------------------------
@@ -117,7 +119,7 @@ create table sys_role (
   remark            varchar(500)    default null               comment '备注',
   primary key (role_id)
 ) engine=innodb auto_increment=100 comment = '角色信息表';
-
+ALTER TABLE sys_role CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-角色信息表数据
 -- ----------------------------
@@ -148,7 +150,7 @@ create table sys_menu (
   remark            varchar(500)    default ''                 comment '备注',
   primary key (menu_id)
 ) engine=innodb auto_increment=2000 comment = '菜单权限表';
-
+ALTER TABLE sys_menu CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-菜单信息表数据
 -- ----------------------------
@@ -264,7 +266,7 @@ create table sys_user_role (
   role_id   bigint(20) not null comment '角色ID',
   primary key(user_id, role_id)
 ) engine=innodb comment = '用户和角色关联表';
-
+ALTER TABLE sys_user_role CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-用户和角色关联表数据
 -- ----------------------------
@@ -281,7 +283,7 @@ create table sys_role_menu (
   menu_id   bigint(20) not null comment '菜单ID',
   primary key(role_id, menu_id)
 ) engine=innodb comment = '角色和菜单关联表';
-
+ALTER TABLE sys_role_menu CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-角色和菜单关联表数据
 -- ----------------------------
@@ -380,7 +382,7 @@ create table sys_role_dept (
   dept_id   bigint(20) not null comment '部门ID',
   primary key(role_id, dept_id)
 ) engine=innodb comment = '角色和部门关联表';
-
+ALTER TABLE sys_role_dept CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-角色和部门关联表数据
 -- ----------------------------
@@ -398,7 +400,7 @@ create table sys_user_post
   post_id   bigint(20) not null comment '岗位ID',
   primary key (user_id, post_id)
 ) engine=innodb comment = '用户与岗位关联表';
-
+ALTER TABLE sys_user_post CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-用户与岗位关联表数据
 -- ----------------------------
@@ -429,7 +431,7 @@ create table sys_oper_log (
   oper_time         datetime                                   comment '操作时间',
   primary key (oper_id)
 ) engine=innodb auto_increment=100 comment = '操作日志记录';
-
+ALTER TABLE sys_oper_log CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 11、字典类型表
@@ -449,7 +451,7 @@ create table sys_dict_type
   primary key (dict_id),
   unique (dict_type)
 ) engine=innodb auto_increment=100 comment = '字典类型表';
-
+ALTER TABLE sys_dict_type CONVERT TO CHARACTER SET utf8mb4;
 insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        '0', 'admin', sysdate(), '', null, '用户性别列表');
 insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       '0', 'admin', sysdate(), '', null, '菜单状态列表');
 insert into sys_dict_type values(3,  '系统开关', 'sys_normal_disable',  '0', 'admin', sysdate(), '', null, '系统开关列表');
@@ -484,7 +486,7 @@ create table sys_dict_data
   remark           varchar(500)    default null               comment '备注',
   primary key (dict_code)
 ) engine=innodb auto_increment=100 comment = '字典数据表';
-
+ALTER TABLE sys_dict_data CONVERT TO CHARACTER SET utf8mb4;
 insert into sys_dict_data values(1,  1,  '男',       '0',       'sys_user_sex',        '',   '',        'Y', '0', 'admin', sysdate(), '', null, '性别男');
 insert into sys_dict_data values(2,  2,  '女',       '1',       'sys_user_sex',        '',   '',        'N', '0', 'admin', sysdate(), '', null, '性别女');
 insert into sys_dict_data values(3,  3,  '未知',     '2',       'sys_user_sex',        '',   '',        'N', '0', 'admin', sysdate(), '', null, '性别未知');
@@ -533,7 +535,7 @@ create table sys_config (
   remark            varchar(500)    default null               comment '备注',
   primary key (config_id)
 ) engine=innodb auto_increment=100 comment = '参数配置表';
-
+ALTER TABLE sys_config CONVERT TO CHARACTER SET utf8mb4;
 insert into sys_config values(1,  '主框架页-默认皮肤样式名称',     'sys.index.skinName',               'skin-blue',     'Y', 'admin', sysdate(), '', null, '蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow');
 insert into sys_config values(2,  '用户管理-账号初始密码',         'sys.user.initPassword',            '123456',        'Y', 'admin', sysdate(), '', null, '初始化密码 123456');
 insert into sys_config values(3,  '主框架页-侧边栏主题',           'sys.index.sideTheme',              'theme-dark',    'Y', 'admin', sysdate(), '', null, '深黑主题theme-dark，浅色主题theme-light，深蓝主题theme-blue');
@@ -562,7 +564,7 @@ create table sys_logininfor (
   login_time     datetime                                 comment '访问时间',
   primary key (info_id)
 ) engine=innodb auto_increment=100 comment = '系统访问记录';
-
+ALTER TABLE sys_logininfor CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 15、在线用户记录
@@ -582,7 +584,7 @@ create table sys_user_online (
   expire_time       int(5)        default 0                 comment '超时时间，单位为分钟',
   primary key (sessionId)
 ) engine=innodb comment = '在线用户记录';
-
+ALTER TABLE sys_user_online CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 16、定时任务调度表
@@ -604,7 +606,7 @@ create table sys_job (
   remark              varchar(500)  default ''                 comment '备注信息',
   primary key (job_id, job_name, job_group)
 ) engine=innodb auto_increment=100 comment = '定时任务调度表';
-
+ALTER TABLE sys_job CONVERT TO CHARACTER SET utf8mb4;
 insert into sys_job values(1, '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/10 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
 insert into sys_job values(2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')',  '0/15 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
 insert into sys_job values(3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
@@ -625,7 +627,7 @@ create table sys_job_log (
   create_time         datetime                                  comment '创建时间',
   primary key (job_log_id)
 ) engine=innodb comment = '定时任务调度日志表';
-
+ALTER TABLE sys_job_log CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 18、通知公告表
@@ -644,7 +646,7 @@ create table sys_notice (
   remark            varchar(255)    default null               comment '备注',
   primary key (notice_id)
 ) engine=innodb auto_increment=10 comment = '通知公告表';
-
+ALTER TABLE sys_notice CONVERT TO CHARACTER SET utf8mb4;
 -- ----------------------------
 -- 初始化-公告信息表数据
 -- ----------------------------
@@ -679,7 +681,7 @@ create table gen_table (
   remark               varchar(500)    default null               comment '备注',
   primary key (table_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表';
-
+ALTER TABLE gen_table CONVERT TO CHARACTER SET utf8mb4;
 
 -- ----------------------------
 -- 20、代码生成业务表字段
@@ -710,3 +712,4 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+ALTER TABLE gen_table_column CONVERT TO CHARACTER SET utf8mb4;

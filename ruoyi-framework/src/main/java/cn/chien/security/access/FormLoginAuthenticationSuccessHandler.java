@@ -1,10 +1,13 @@
 package cn.chien.security.access;
 
+import cn.chien.constant.Constants;
 import cn.chien.domain.SysUser;
 import cn.chien.security.common.Logins;
+import cn.chien.service.ISysLoginInfoService;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.DateUtils;
 import cn.chien.utils.IpUtils;
+import cn.chien.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -24,12 +27,13 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
 
     @Autowired
     private ISysUserService sysUserService;
+    
+    @Autowired
+    private ISysLoginInfoService sysLoginInfoService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         recordLoginInfo(request, Logins.LOGIN_USER.get());
-        //todo 记录登录日志
-        //AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         response.sendRedirect("/");
     }
 
@@ -39,6 +43,7 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
         user.setLoginIp(IpUtils.getIpAddr(request));
         user.setLoginDate(DateUtils.getNowDate());
         sysUserService.updateUserInfo(user);
+        sysLoginInfoService.recordLoginInfo(sysUser.getLoginName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"), request);
     }
 
 }

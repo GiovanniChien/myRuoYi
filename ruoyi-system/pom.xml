@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.chien</groupId>
-            <artifactId>ruoyi-common</artifactId>
+            <artifactId>ruoyi-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.11</version>
+            <version>1.2.12</version>
         </dependency>
     </dependencies>
 

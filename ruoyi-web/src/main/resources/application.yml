@@ -90,3 +90,14 @@ security:
   rememberMe:
     # 是否开启记住我
     enabled: true
+
+ruoyi:
+  threadpool:
+    # 核心线程数大小
+    corePoolSize: 10
+    # 最大线程数
+    maxPoolSize: 10
+    # 队列容量
+    queueCapacity: 20
+    # 活跃时间
+    keepAliveSeconds: 10
