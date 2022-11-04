@@ -1,9 +1,11 @@
 package cn.chien.security.config;
 
 import cn.chien.properties.SecurityProperties;
+import cn.chien.security.CsrfSecurityRequestMatcher;
 import cn.chien.security.error.AccessEntryPoint;
 import cn.chien.security.error.CustomAccessDeniedHandler;
 import cn.chien.session.config.CustomSessionInformationExpiredStrategy;
+import cn.chien.web.handler.RequestMappingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -30,6 +32,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
 
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
+    
+    @Autowired
+    private RequestMappingHandler requestMappingHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,6 +47,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .and().authorizeRequests((requests) -> requests.filterSecurityInterceptorOncePerRequest(false))
                 .authorizeRequests().anyRequest().access("@urlAccessControl.check(authentication, request)")
+                .and().csrf().requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher(requestMappingHandler))
                 .and().servletApi()
                 .and().cors();
         http.sessionManagement().sessionFixation().migrateSession()
