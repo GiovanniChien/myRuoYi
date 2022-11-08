@@ -1,6 +1,7 @@
 package cn.chien.domain;
 
 import cn.chien.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -72,6 +73,7 @@ public class SysRole extends BaseEntity
         this.roleId = roleId;
     }
 
+    @JsonIgnore
     public boolean isAdmin()
     {
         return isAdmin(this.roleId);

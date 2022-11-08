@@ -1,14 +1,8 @@
 package cn.chien.security.access;
 
-import cn.chien.constant.Constants;
 import cn.chien.core.domain.AjaxResult;
-import cn.chien.domain.SysUser;
+import cn.chien.security.LoginSuccessHandler;
 import cn.chien.security.common.Logins;
-import cn.chien.service.ISysLoginInfoService;
-import cn.chien.service.ISysUserService;
-import cn.chien.utils.DateUtils;
-import cn.chien.utils.IpUtils;
-import cn.chien.utils.MessageUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 /**
  * @author qian.diqi
@@ -35,10 +30,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class FormLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-    private final ISysUserService sysUserService;
-    
-    private final ISysLoginInfoService sysLoginInfoService;
     
     private final CsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
     
@@ -46,7 +37,19 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        recordLoginInfo(request, Logins.LOGIN_USER.get());
+        invokeLoginSuccessHandler(request, response, authentication);
+        writeResponse(request, response);
+    }
+    
+    private void invokeLoginSuccessHandler(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) {
+        ServiceLoader<LoginSuccessHandler> handlers = ServiceLoader.load(LoginSuccessHandler.class);
+        for (LoginSuccessHandler handler : handlers) {
+            handler.onLoginSuccess(request, response, authentication);
+        }
+    }
+    
+    private void writeResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> resp = new HashMap<>();
         resp.put("user", Logins.LOGIN_USER.get());
         CsrfToken csrfToken = repository.generateToken(request);
@@ -57,16 +60,6 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
         objectMapper.writeValue(pw, AjaxResult.success(resp));
         pw.flush();
         pw.close();
-//        response.sendRedirect("/");
-    }
-
-    private void recordLoginInfo(HttpServletRequest request, SysUser sysUser) {
-        SysUser user = new SysUser();
-        user.setUserId(sysUser.getUserId());
-        user.setLoginIp(IpUtils.getIpAddr(request));
-        user.setLoginDate(DateUtils.getNowDate());
-        sysUserService.updateUserInfo(user);
-        sysLoginInfoService.recordLoginInfo(sysUser.getLoginName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"), request);
     }
 
 }
