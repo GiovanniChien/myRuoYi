@@ -30,7 +30,8 @@ function login() {
             "rememberMe": rememberMe
         },
         success: function(r) {
-            if (r.code == web_status.SUCCESS) {
+            if (r.code === web_status.SUCCESS) {
+                window.localStorage.setItem('_csrf', r.data._csrf);
                 location.href = ctx + 'index';
             } else {
             	$('.imgcode').click();

@@ -12,15 +12,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
+
+import javax.sql.DataSource;
 
 /**
  * @author qian.diqi
  * @date 2022/7/4
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter implements Ordered {
 
     @Autowired
@@ -34,6 +39,12 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
 
     @Autowired
     private FormLoginAuthenticationFailureHandler authenticationFailureHandler;
+    
+    @Autowired
+    private DataSource dataSource;
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     protected FormLoginAutoConfiguration() {
         super(true);
@@ -65,10 +76,22 @@ public class FormLoginAutoConfiguration extends WebSecurityConfigurerAdapter imp
                 .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().and().cors();
+                .exceptionHandling()
+            .and().cors()
+            .and().rememberMe()
+                .rememberMeParameter("rememberMe")
+                .tokenRepository(persistentTokenRepository())
+                .userDetailsService(userDetailsService)
+                .authenticationSuccessHandler(this.authenticationSuccessHandler);
         http.sessionManagement().sessionFixation().migrateSession()
                 .maximumSessions(securityProperties.getSession().getMaxSession())
                 .maxSessionsPreventsLogin(securityProperties.getSession().getKickOutAfter());
+    }
+    
+    private PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 
     @Override

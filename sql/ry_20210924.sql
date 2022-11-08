@@ -713,3 +713,15 @@ create table gen_table_column (
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
 ALTER TABLE gen_table_column CONVERT TO CHARACTER SET utf8mb4;
+
+-- ----------------------------
+-- 21、rememberme
+-- ----------------------------
+drop table if exists persistent_logins;
+create table persistent_logins (
+    username  varchar(64) not null,
+    series    varchar(64) primary key,
+    token     varchar(64) not null,
+    last_used timestamp   not null
+) engine=innodb comment = 'rememberme';
+ALTER TABLE persistent_logins CONVERT TO CHARACTER SET utf8mb4;

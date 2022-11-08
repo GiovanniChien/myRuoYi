@@ -1033,7 +1033,11 @@ var table = {
                     type: type,
                     dataType: dataType,
                     data: data,
-                    beforeSend: function () {
+                    beforeSend: function (xhr) {
+                        let csrfToken = window.localStorage.getItem('_csrf');
+                        if (csrfToken) {
+                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.parameterName);
+                        }
                         $.modal.loading("正在处理中，请稍候...");
                     },
                     success: function(result) {
