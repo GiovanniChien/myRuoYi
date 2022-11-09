@@ -1,5 +1,6 @@
-package cn.chien.domain;
+package cn.chien.domain.entity;
 
+import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
  *
  * @author ruoyi
  */
-@TableName("sys_dept")
+@TableName(value = "sys_dept", excludeProperty = {"searchValue", "params"})
 public class SysDept extends BaseEntity {
     
     /**

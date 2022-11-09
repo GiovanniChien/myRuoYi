@@ -1,7 +1,7 @@
 package cn.chien.security.access;
 
 import cn.chien.constant.Constants;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.exception.user.ExceedSessionLimitException;
 import cn.chien.exception.user.UserBlockedException;
 import cn.chien.exception.user.UserDeleteException;

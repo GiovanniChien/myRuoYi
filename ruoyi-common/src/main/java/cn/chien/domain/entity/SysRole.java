@@ -1,6 +1,7 @@
-package cn.chien.domain;
+package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
+import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -16,7 +17,7 @@ import static cn.chien.annotation.Excel.*;
  *
  * @author ruoyi
  */
-@TableName("sys_role")
+@TableName(value = "sys_role", excludeProperty = {"searchValue", "params"})
 public class SysRole extends BaseEntity {
     
     /**

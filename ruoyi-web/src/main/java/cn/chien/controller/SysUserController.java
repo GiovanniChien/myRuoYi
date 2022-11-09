@@ -1,6 +1,6 @@
 package cn.chien.controller;
 
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

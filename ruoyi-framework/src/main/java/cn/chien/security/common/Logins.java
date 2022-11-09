@@ -1,6 +1,6 @@
 package cn.chien.security.common;
 
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import org.springframework.core.NamedInheritableThreadLocal;
 
 /**

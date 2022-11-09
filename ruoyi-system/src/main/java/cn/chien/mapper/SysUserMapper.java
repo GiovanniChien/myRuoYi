@@ -1,6 +1,6 @@
 package cn.chien.mapper;
 
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

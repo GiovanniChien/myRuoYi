@@ -3,7 +3,7 @@ package cn.chien.security.access;
 import cn.chien.cache.CacheClient;
 import cn.chien.constant.Constants;
 import cn.chien.constant.UserConstants;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.enums.CacheNameSpace;
 import cn.chien.properties.SecurityProperties;
 import cn.chien.security.common.Logins;

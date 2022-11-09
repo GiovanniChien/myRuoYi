@@ -1,8 +1,9 @@
-package cn.chien.domain;
+package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
 import cn.chien.annotation.Excel.Type;
 import cn.chien.annotation.Excels;
+import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,7 +22,7 @@ import static cn.chien.annotation.Excel.*;
  *
  * @author ruoyi
  */
-@TableName("sys_user")
+@TableName(value = "sys_user", excludeProperty = {"searchValue", "params"})
 public class SysUser extends BaseEntity {
     
     /**
@@ -154,6 +155,7 @@ public class SysUser extends BaseEntity {
         this.userId = userId;
     }
     
+    @JsonIgnore
     public boolean isAdmin() {
         return isAdmin(this.userId);
     }

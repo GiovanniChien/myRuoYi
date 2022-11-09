@@ -1,6 +1,6 @@
 package cn.chien.service;
 
-import cn.chien.domain.SysConfig;
+import cn.chien.domain.entity.SysConfig;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package cn.chien.domain;
+package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
+import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,7 +14,7 @@ import javax.validation.constraints.Size;
  *
  * @author ruoyi
  */
-@TableName("sys_config")
+@TableName(value = "sys_config", excludeProperty = {"searchValue", "params"})
 public class SysConfig extends BaseEntity {
     
     /**

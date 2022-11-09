@@ -1,6 +1,6 @@
 package cn.chien.service;
 
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 
 import java.util.List;
 

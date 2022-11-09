@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public class SysLoginInfoServiceImpl implements ISysLoginInfoService {
     @Override
     @Async
     public void insertLoginInfo(SysLoginInfo loginInfo) {
+        loginInfo.setLoginTime(new Date());
         loginInfoMapper.insert(loginInfo);
     }
     

@@ -1,8 +1,8 @@
 package cn.chien.security.access;
 
 import cn.chien.constant.UserConstants;
-import cn.chien.domain.SysRole;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysRole;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.enums.UserStatus;
 import cn.chien.security.common.Logins;
 import cn.chien.service.ISysConfigService;
@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

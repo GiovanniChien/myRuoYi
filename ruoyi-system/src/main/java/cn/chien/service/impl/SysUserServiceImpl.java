@@ -1,6 +1,6 @@
 package cn.chien.service.impl;
 
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.mapper.SysUserMapper;
 import cn.chien.service.ISysUserService;
 import org.springframework.stereotype.Service;

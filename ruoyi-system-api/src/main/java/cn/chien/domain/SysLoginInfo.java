@@ -1,7 +1,6 @@
 package cn.chien.domain;
 
 import cn.chien.annotation.Excel;
-import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,7 +12,8 @@ import java.util.Date;
  *
  * @author ruoyi
  */
-@TableName("sys_logininfor")
+@TableName(value = "sys_logininfor", excludeProperty = {"searchValue", "params", "createBy", "createTime", "updateBy",
+        "updateTime", "remark"})
 public class SysLoginInfo extends BaseEntity {
     
     private static final long serialVersionUID = 1L;

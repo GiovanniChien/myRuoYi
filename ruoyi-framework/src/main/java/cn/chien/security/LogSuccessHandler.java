@@ -1,7 +1,7 @@
 package cn.chien.security;
 
 import cn.chien.constant.Constants;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.security.common.Logins;
 import cn.chien.service.ISysLoginInfoService;
 import cn.chien.service.ISysUserService;

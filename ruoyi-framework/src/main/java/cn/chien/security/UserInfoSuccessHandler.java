@@ -1,7 +1,7 @@
 package cn.chien.security;
 
 import cn.chien.core.auth.AuthThreadLocal;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.security.common.Logins;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.ReflectionUtils;
@@ -33,5 +33,6 @@ public class UserInfoSuccessHandler implements LoginSuccessHandler {
             session.setAttribute(field.getName(), val);
             AuthThreadLocal.set(field.getName(), val);
         }, field -> fieldNames.contains(field.getName()));
+        session.setAttribute("sysUser", sysUser);
     }
 }

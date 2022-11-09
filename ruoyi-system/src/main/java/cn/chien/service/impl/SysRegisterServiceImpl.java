@@ -2,7 +2,7 @@ package cn.chien.service.impl;
 
 import cn.chien.constant.Constants;
 import cn.chien.constant.UserConstants;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.service.ISysLoginInfoService;
 import cn.chien.service.ISysRegisterService;
 import cn.chien.service.ISysUserService;

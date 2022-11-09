@@ -68,6 +68,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
                 .maximumSessions(securityProperties.getSession().getMaxSession())
                 .maxSessionsPreventsLogin(securityProperties.getSession().getKickOutAfter())
                 .expiredSessionStrategy(customSessionInformationExpiredStrategy);
+        http.headers().frameOptions().sameOrigin();
     }
     
     private PersistentTokenRepository persistentTokenRepository() {

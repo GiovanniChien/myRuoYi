@@ -2,7 +2,7 @@ package cn.chien.service.impl;
 
 import cn.chien.cache.CacheClient;
 import cn.chien.constant.UserConstants;
-import cn.chien.domain.SysConfig;
+import cn.chien.domain.entity.SysConfig;
 import cn.chien.enums.CacheNameSpace;
 import cn.chien.exception.ServiceException;
 import cn.chien.mapper.SysConfigMapper;

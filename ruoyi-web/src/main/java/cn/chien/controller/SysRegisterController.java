@@ -3,7 +3,7 @@ package cn.chien.controller;
 import cn.chien.annotation.SkipSessionCheck;
 import cn.chien.controller.base.BaseController;
 import cn.chien.core.domain.AjaxResult;
-import cn.chien.domain.SysUser;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysRegisterService;
 import cn.chien.utils.StringUtils;
