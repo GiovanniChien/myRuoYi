@@ -10,6 +10,7 @@ import cn.chien.utils.LogUtils;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,7 +43,7 @@ public class SysLoginInfoServiceImpl implements ISysLoginInfoService {
     @Override
     @Async
     public void insertLoginInfo(SysLoginInfo loginInfo) {
-        loginInfoMapper.insertLoginInfo(loginInfo);
+        loginInfoMapper.insert(loginInfo);
     }
     
     /**
@@ -52,7 +54,8 @@ public class SysLoginInfoServiceImpl implements ISysLoginInfoService {
      */
     @Override
     public List<SysLoginInfo> selectLoginInfoList(SysLoginInfo loginInfo) {
-        return loginInfoMapper.selectLoginInfoList(loginInfo);
+        LambdaQueryWrapper<SysLoginInfo> wrapper = new LambdaQueryWrapper<>(loginInfo);
+        return loginInfoMapper.selectList(wrapper);
     }
     
     /**
@@ -63,7 +66,7 @@ public class SysLoginInfoServiceImpl implements ISysLoginInfoService {
      */
     @Override
     public int deleteLoginInfoByIds(String ids) {
-        return loginInfoMapper.deleteLoginInfoByIds(Convert.toStrArray(ids));
+        return loginInfoMapper.deleteBatchIds(Arrays.asList(Convert.toStrArray(ids)));
     }
     
     /**

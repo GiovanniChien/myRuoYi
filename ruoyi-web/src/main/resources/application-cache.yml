@@ -13,3 +13,5 @@ spring:
       - namespace: loginRecordCache
         maxInterval: ${security.user.password.lockTime:600}
         refreshTtlAfterAccess: false
+      - namespace: sysConfig
+        refreshTtlAfterAccess: false

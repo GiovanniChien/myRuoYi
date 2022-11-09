@@ -10,8 +10,10 @@ import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.BatchStrategies;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,23 +33,24 @@ import java.time.Duration;
 @EnableConfigurationProperties({DefaultRedisProperties.class, CacheManagerProperties.class})
 @Configuration
 public class RedisConfiguration {
-
+    
     private CacheManagerProperties cacheManagerProperties;
-
+    
     @Autowired
     public void setCacheManagerProperties(CacheManagerProperties cacheManagerProperties) {
         this.cacheManagerProperties = cacheManagerProperties;
     }
-
+    
     @Bean
     @LettuceConnectionFactory
     public RedisConnectionFactory lettuceConnectionFactory(ObjectProvider<DefaultRedisProperties> redisProperties) {
         RedisProperties properties = redisProperties.getIfAvailable();
         return new LettuceConnectionFactoryBuilder(properties).build();
     }
-
+    
     @Bean
-    public <K, V> RedisTemplate<K, V> redisTemplate(@LettuceConnectionFactory RedisConnectionFactory redisConnectionFactory) {
+    public <K, V> RedisTemplate<K, V> redisTemplate(
+            @LettuceConnectionFactory RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<K, V> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -56,28 +59,30 @@ public class RedisConfiguration {
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
-
+    
     @Bean
-    public RedisCacheManager redisCacheManager(@LettuceConnectionFactory RedisConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager redisCacheManager(
+            @LettuceConnectionFactory RedisConnectionFactory redisConnectionFactory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-
+        
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
-                .prefixCacheNameWith("RuoYi::")
-                .disableCachingNullValues();
-
-        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(config)
-                .transactionAware();
-
+                .serializeValuesWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+                .prefixCacheNameWith("RuoYi:").disableCachingNullValues();
+        
+        // 默认批量删除策略使用keys命令，这里替换为scan命令
+        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(
+                        RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory, BatchStrategies.scan(1000)))
+                .cacheDefaults(config).transactionAware();
+        
         for (CacheSpec cacheSpec : cacheManagerProperties.getManager()) {
             RedisCacheConfiguration redisCache = RedisCacheConfiguration.defaultCacheConfig()
                     .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-                    .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
-                    .prefixCacheNameWith("RuoYi::")
-                    .disableCachingNullValues();
+                    .serializeValuesWith(
+                            RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+                    .prefixCacheNameWith("RuoYi:").disableCachingNullValues();
             if (cacheSpec.getMaxInterval() != null && cacheSpec.getMaxInterval() > 0) {
                 redisCache.entryTtl(Duration.ofSeconds(cacheSpec.getMaxInterval()));
             }

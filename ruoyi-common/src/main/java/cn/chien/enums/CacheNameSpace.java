@@ -11,6 +11,10 @@ public enum CacheNameSpace {
      */
     DEFAULT("default"),
     /**
+     * 系统配置缓存
+     */
+    SYS_CONFIG("sysConfig"),
+    /**
      * 登录记录缓存
      */
     LOGIN_RECORD_CACHE("loginRecordCache");

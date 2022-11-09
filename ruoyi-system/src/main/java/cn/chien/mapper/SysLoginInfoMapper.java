@@ -1,6 +1,7 @@
 package cn.chien.mapper;
 
 import cn.chien.domain.SysLoginInfo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * 
  * @author ruoyi
  */
-public interface SysLoginInfoMapper {
+public interface SysLoginInfoMapper extends BaseMapper<SysLoginInfo> {
     /**
      * 新增系统登录日志
      * 

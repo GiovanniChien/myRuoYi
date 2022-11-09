@@ -78,5 +78,14 @@ public class CacheClient {
     public static void evict(Object key) {
         evict(CacheNameSpace.DEFAULT.namespace(), key);
     }
+    
+    public static void evictAllEntries() {
+        evictAllEntries(CacheNameSpace.DEFAULT.namespace());
+    }
+    
+    public static void evictAllEntries(String cacheNameSpace) {
+        Cache cache = getCache(cacheNameSpace);
+        cache.invalidate();
+    }
 
 }

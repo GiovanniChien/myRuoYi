@@ -1,6 +1,7 @@
 package cn.chien.mapper;
 
 import cn.chien.domain.SysUser;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * 
  * @author ruoyi
  */
-public interface SysUserMapper {
+public interface SysUserMapper extends BaseMapper<SysUser> {
     /**
      * 根据条件分页查询用户列表
      * 
