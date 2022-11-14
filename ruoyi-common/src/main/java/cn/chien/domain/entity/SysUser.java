@@ -22,7 +22,8 @@ import static cn.chien.annotation.Excel.*;
  *
  * @author ruoyi
  */
-@TableName(value = "sys_user", excludeProperty = {"searchValue", "params"})
+@TableName(value = "sys_user", excludeProperty = {"searchValue", "params", "parentId", "roleId", "dept", "roles",
+        "roleIds", "postIds"})
 public class SysUser extends BaseEntity {
     
     /**

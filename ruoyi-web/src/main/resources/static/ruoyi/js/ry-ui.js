@@ -1034,9 +1034,9 @@ var table = {
                     dataType: dataType,
                     data: data,
                     beforeSend: function (xhr) {
-                        let csrfToken = window.localStorage.getItem('_csrf');
+                        let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
                         if (csrfToken) {
-                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.parameterName);
+                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
                         }
                         $.modal.loading("正在处理中，请稍候...");
                     },
@@ -1232,7 +1232,11 @@ var table = {
                     type: "post",
                     dataType: "json",
                     data: data,
-                    beforeSend: function () {
+                    beforeSend: function (xhr) {
+                        let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+                        if (csrfToken) {
+                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+                        }
                         $.modal.loading("正在处理中，请稍候...");
                     },
                     success: function(result) {
@@ -1348,15 +1352,25 @@ var table = {
         validate: {
             // 判断返回标识是否唯一 false 为存在 true 为不存在
             unique: function (value) {
-                if (value == "0") {
-                    return true;
-                }
-                return false;
+                return value === "0";
             },
             // 表单验证
             form: function (formId) {
-                var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-                return $("#" + currentId).validate().form();
+                const currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                let $valid = $("#" + currentId);
+                let rules = $valid.validate().settings.rules;
+                for(let e in rules) {
+                    let r = rules[e];
+                    if(r.remote) {
+                        r.remote.beforeSend = function(xhr) {
+                            let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+                            if (csrfToken) {
+                                xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+                            }
+                        }
+                    }
+                }
+                return $valid.validate().form();
             },
             // 重置表单验证（清除提示信息）
             reset: function (formId) {

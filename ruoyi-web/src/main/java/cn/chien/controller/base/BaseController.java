@@ -1,13 +1,16 @@
 package cn.chien.controller.base;
 
 import cn.chien.core.domain.AjaxResult;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.utils.DateUtils;
+import cn.chien.utils.ServletUtils;
 import cn.chien.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import javax.servlet.http.HttpSession;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
@@ -139,20 +142,22 @@ public class BaseController {
         return StringUtils.format("redirect:{}", url);
     }
     
-//    /**
-//     * 获取用户缓存信息
-//     */
-//    public SysUser getSysUser() {
-//        return ShiroUtils.getSysUser();
-//    }
-//
-//    /**
-//     * 设置用户缓存信息
-//     */
-//    public void setSysUser(SysUser user) {
-//        ShiroUtils.setSysUser(user);
-//    }
-//
+    /**
+     * 获取用户缓存信息
+     */
+    public SysUser getSysUser() {
+        HttpSession session = ServletUtils.getSession();
+        return (SysUser) session.getAttribute("sysUser");
+    }
+    
+    /**
+     * 设置用户缓存信息
+     */
+    public void setSysUser(SysUser user) {
+        HttpSession session = ServletUtils.getSession();
+        session.setAttribute("sysUser", user);
+    }
+    
 //    /**
 //     * 获取登录用户id
 //     */

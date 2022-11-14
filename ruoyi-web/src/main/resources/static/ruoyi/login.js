@@ -31,7 +31,7 @@ function login() {
         },
         success: function(r) {
             if (r.code === web_status.SUCCESS) {
-                window.localStorage.setItem('_csrf', r.data._csrf);
+                window.localStorage.setItem('_csrf', JSON.stringify(r.data._csrf));
                 location.href = ctx + 'index';
             } else {
             	$('.imgcode').click();

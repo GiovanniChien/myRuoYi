@@ -538,8 +538,18 @@ function _stopIt(e) {
 
 /** 设置全局ajax处理 */
 $.ajaxSetup({
+    beforeSend: function (xhr) {
+        let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+        if (csrfToken) {
+            xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+        }
+    },
     complete: function(XMLHttpRequest, textStatus) {
-        if (textStatus == 'timeout') {
+        if (XMLHttpRequest.status === 401) {
+            $.modal.enable();
+            $.modal.closeLoading();
+        }
+        else if (textStatus == 'timeout') {
             $.modal.alertWarning("服务器超时，请稍后再试！");
             $.modal.enable();
             $.modal.closeLoading();
@@ -547,6 +557,15 @@ $.ajaxSetup({
             $.modal.alertWarning("服务器错误，请联系管理员！");
             $.modal.enable();
             $.modal.closeLoading();
+        }
+    },
+    error: function (data) {
+        let json = data.responseJSON;
+        if (json) {
+            let errorCode = json.errorCode;
+            if (errorCode === 'user.session.timeout' || errorCode === 'session.multi.login') {
+                location.reload();
+            }
         }
     }
 });
