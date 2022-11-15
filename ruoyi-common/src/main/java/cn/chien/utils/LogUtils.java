@@ -1,6 +1,6 @@
 package cn.chien.utils;
 
-import com.alibaba.fastjson2.JSON;
+import cn.chien.utils.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,13 +109,13 @@ public class LogUtils
         {
             msg = "";
         }
-        return "[" + msg.toString() + "]";
+        return "[" + msg + "]";
     }
 
     protected static String getParams(HttpServletRequest request) throws Exception
     {
         Map<String, String[]> params = request.getParameterMap();
-        return JSON.toJSONString(params);
+        return JsonUtils.writeValueAsString(params);
     }
 
     protected static String getUsername()

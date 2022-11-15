@@ -1,10 +1,12 @@
 package cn.chien.utils;
 
 import cn.chien.constant.Constants;
-import com.alibaba.fastjson2.JSONObject;
+import cn.chien.utils.json.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * 获取地址类
@@ -32,9 +34,9 @@ public class AddressUtils {
                 log.error("获取地理位置异常 {}", ip);
                 return UNKNOWN;
             }
-            JSONObject obj = JSONObject.parseObject(rspStr);
-            String region = obj.getString("pro");
-            String city = obj.getString("city");
+            Map<String, Object> obj = JsonUtils.readValueAsMap(rspStr);
+            String region = (String) obj.get("pro");
+            String city = (String) obj.get("city");
             return String.format("%s %s", region, city);
         } catch (Exception e) {
             log.error("获取地理位置异常", e);

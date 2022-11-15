@@ -1,12 +1,16 @@
 package cn.chien.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qiandq3
@@ -48,4 +52,15 @@ public final class JsonUtils {
         }
     }
     
+    public static Map<String, Object> readValueAsMap(String jsonStr) {
+        try {
+            return DEFAULT_OBJECT_MAPPER.readValue(jsonStr, new MapTypeReference());
+        }
+        catch (JsonProcessingException e) {
+            log.error("deserialize error.", e);
+            return new HashMap<>();
+        }
+    }
+    
+    private static class MapTypeReference extends TypeReference<Map<String, Object>> { }
 }
