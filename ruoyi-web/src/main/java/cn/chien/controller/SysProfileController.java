@@ -1,16 +1,17 @@
 package cn.chien.controller;
 
+import cn.chien.annotation.BusinessLog;
 import cn.chien.constant.UserConstants;
 import cn.chien.controller.base.BaseController;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.domain.entity.SysUser;
+import cn.chien.enums.BusinessType;
 import cn.chien.properties.ApplicationProperties;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.StringUtils;
 import cn.chien.utils.file.FileUtils;
 import cn.chien.utils.file.MimeTypeUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("/system/user/profile")
-@Log
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class SysProfileController extends BaseController {
     
@@ -55,6 +55,7 @@ public class SysProfileController extends BaseController {
     
     @PostMapping("/updateAvatar")
     @ResponseBody
+    @BusinessLog(title = "个人信息", businessType = BusinessType.UPDATE)
     public AjaxResult updateAvatar(@RequestParam("avatarfile") MultipartFile file) {
         SysUser sysUser = getSysUser();
         try {
@@ -80,6 +81,7 @@ public class SysProfileController extends BaseController {
     //    @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/update")
     @ResponseBody
+    @BusinessLog(title = "个人信息", businessType = BusinessType.UPDATE)
     public AjaxResult update(SysUser user) {
         SysUser currentUser = getSysUser();
         currentUser.setUserName(user.getUserName());
