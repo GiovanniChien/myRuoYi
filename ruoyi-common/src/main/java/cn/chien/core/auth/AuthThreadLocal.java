@@ -21,15 +21,26 @@ public final class AuthThreadLocal {
     }
     
     public static Object get(String key) {
-        return threadLocal.get().get(key);
+        return threadLocal.get() == null ? null : threadLocal.get().get(key);
     }
     
     public static String getString(String key) {
-        return (String) get(key);
+        Object val = get(key);
+        return val == null ? null : val.toString();
     }
     
     public static Integer getInteger(String key) {
-        return (Integer) get(key);
+        Object val = get(key);
+        return val == null ? null : Integer.valueOf(val.toString());
+    }
+    
+    public static Long getLong(String key) {
+        Object val = get(key);
+        return val == null ? null : Long.parseLong(val.toString());
+    }
+    
+    public static Long getUserId() {
+        return getLong(AuthField.USER_ID.fieldName);
     }
     
     public static void remove() {
@@ -50,7 +61,7 @@ public final class AuthThreadLocal {
         DEPT("dept"),
         ROLES("roles");
         
-        public String fieldName;
+        public final String fieldName;
         
         AuthField(String fieldName) {
             this.fieldName = fieldName;

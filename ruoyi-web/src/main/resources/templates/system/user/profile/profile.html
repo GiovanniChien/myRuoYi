@@ -287,7 +287,7 @@
 
     function submitUserInfo() {
         if ($.validate.form()) {
-            $.operate.saveModal(ctx + "system/user/profile/update", $('#form-user-edit').serialize());
+            $.operate.saveModal(ctx + "system/user/profile/update", $.form.val('#form-user-edit'));
         }
     }
 
@@ -295,19 +295,6 @@
     $("#form-user-resetPwd").validate({
         onkeyup: false,
         rules: {
-            oldPassword: {
-                required: true,
-                remote: {
-                    url: ctx + "system/user/profile/checkPassword",
-                    type: "get",
-                    dataType: "json",
-                    data: {
-                        password: function () {
-                            return $("input[name='oldPassword']").val();
-                        }
-                    }
-                }
-            },
             newPassword: {
                 required: true,
                 minlength: 6,
@@ -319,10 +306,6 @@
             }
         },
         messages: {
-            oldPassword: {
-                required: "请输入原密码",
-                remote: "原密码错误"
-            },
             newPassword: {
                 required: "请输入新密码",
                 minlength: "密码不能小于6个字符",
@@ -341,7 +324,12 @@
         var chrtype = [[${#strings.defaultString(@config.getKey('sys.account.chrtype'), 0)}]];
         var password = $("#newPassword").val();
         if ($.validate.form("form-user-resetPwd") && checkpwd(chrtype, password)) {
-            $.operate.saveModal(ctx + "system/user/profile/resetPwd", $('#form-user-resetPwd').serialize());
+            // let data = $('#form-user-resetPwd').form();
+            let data = $.form.val('#form-user-resetPwd');
+            data.oldPassword = btoa(data.oldPassword);
+            data.newPassword = btoa(data.newPassword);
+            delete data.confirmPassword;
+            $.operate.saveModal(ctx + "system/user/profile/resetPwd", data);
         }
     }
 </script>

@@ -6,7 +6,7 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info
 # Spring配置
 spring:
   # 模板引擎
@@ -113,3 +113,12 @@ ruoyi:
     queueCapacity: 20
     # 活跃时间
     keepAliveSeconds: 10
+
+aws:
+  s3:
+    enable: true
+    accessKey: eJcO8BxkpAgA7gWq
+    accessSecret: XIjuFwTYoHpTQzGLIGHJc7rJx46kZUyx
+    endpoint: http://localhost:9000
+    region: us-east-1
+    pathStyleAccess: true

@@ -2,6 +2,7 @@ package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
 import cn.chien.domain.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +22,7 @@ public class SysConfig extends BaseEntity {
      * 参数主键
      */
     @Excel(name = "参数主键", cellType = Excel.ColumnType.NUMERIC)
+    @TableId
     private Long configId;
     
     /**

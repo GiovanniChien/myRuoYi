@@ -4,6 +4,7 @@ import cn.chien.annotation.Excel;
 import cn.chien.annotation.Excel.Type;
 import cn.chien.annotation.Excels;
 import cn.chien.domain.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,6 +31,7 @@ public class SysUser extends BaseEntity {
      * 用户ID
      */
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    @TableId
     private Long userId;
     
     /**

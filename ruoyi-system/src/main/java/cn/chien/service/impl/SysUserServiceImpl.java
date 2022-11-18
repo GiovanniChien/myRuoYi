@@ -105,7 +105,7 @@ public class SysUserServiceImpl implements ISysUserService {
     
     @Override
     public int resetUserPwd(SysUser user) {
-        return 0;
+        return updateUserInfo(user);
     }
     
     @Override
