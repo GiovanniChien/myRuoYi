@@ -49,7 +49,7 @@ public class AwsMinioTest {
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create("eJcO8BxkpAgA7gWq", "XIjuFwTYoHpTQzGLIGHJc7rJx46kZUyx")))
                 .build();
-        ossClient = new AwsS3Client(s3Client, s3Presigner);
+        ossClient = new AwsS3Client(s3Client, s3Presigner, "ruoyi", false);
     }
     
     @Test

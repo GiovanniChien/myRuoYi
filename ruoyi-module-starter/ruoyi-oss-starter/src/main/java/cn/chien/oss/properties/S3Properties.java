@@ -33,6 +33,10 @@ public class S3Properties {
     
     private boolean pathStyleAccess = true;
     
+    private String bucketName;
+    
+    private boolean privateBucket;
+    
     public boolean isEnable() {
         return enable;
     }
@@ -79,5 +83,21 @@ public class S3Properties {
     
     public void setPathStyleAccess(boolean pathStyleAccess) {
         this.pathStyleAccess = pathStyleAccess;
+    }
+    
+    public String getBucketName() {
+        return bucketName;
+    }
+    
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+    }
+    
+    public boolean isPrivateBucket() {
+        return privateBucket;
+    }
+    
+    public void setPrivateBucket(boolean privateBucket) {
+        this.privateBucket = privateBucket;
     }
 }

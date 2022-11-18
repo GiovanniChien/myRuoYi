@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
@@ -27,9 +28,15 @@ public class AwsS3Client implements OssClient {
     
     private final S3Presigner s3Presigner;
     
-    public AwsS3Client(S3Client s3Client, S3Presigner s3Presigner) {
+    private final String defaultBucketName;
+    
+    private boolean privateDefaultBucket;
+    
+    public AwsS3Client(S3Client s3Client, S3Presigner s3Presigner, String defaultBucketName, boolean privateDefaultBucket) {
         this.s3Client = s3Client;
         this.s3Presigner = s3Presigner;
+        this.defaultBucketName = defaultBucketName;
+        this.privateDefaultBucket = privateDefaultBucket;
     }
     
     @Override
@@ -49,6 +56,21 @@ public class AwsS3Client implements OssClient {
     
         URL url = s3Client.utilities().getUrl(request);
         return url.toString();
+    }
+    
+    @Override
+    public String getObjectUrl(String objectName) {
+        return getObjectUrl(defaultBucketName, objectName, privateDefaultBucket);
+    }
+    
+    @Override
+    public ResponseInputStream<GetObjectResponse> getObjectInfo(String objectName) {
+        return getObjectInfo(defaultBucketName, objectName);
+    }
+    
+    @Override
+    public PutObjectResponse putObject(String objectName, InputStream stream, long size) {
+        return putObject(defaultBucketName, objectName, stream, size);
     }
     
     @Override

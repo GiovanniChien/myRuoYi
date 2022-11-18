@@ -1,8 +1,5 @@
 package cn.chien.config;
 
-import cn.chien.constant.Constants;
-import cn.chien.properties.ApplicationProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -23,9 +20,6 @@ public class ResourcesConfig implements WebMvcConfigurer {
     @Value("${security.user.indexUrl}")
     private String indexUrl;
     
-    @Autowired
-    private ApplicationProperties applicationProperties;
-    
     //    @Autowired
     //    private RepeatSubmitInterceptor repeatSubmitInterceptor;
     
@@ -39,9 +33,6 @@ public class ResourcesConfig implements WebMvcConfigurer {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        /** 本地文件上传路径 */
-        registry.addResourceHandler(Constants.RESOURCE_PREFIX + "/**")
-                .addResourceLocations("file:" + applicationProperties.getProfile() + "/");
         
         /** swagger配置 */
         registry.addResourceHandler("/swagger-ui/**")

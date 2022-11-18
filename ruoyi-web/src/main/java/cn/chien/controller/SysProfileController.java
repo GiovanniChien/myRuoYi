@@ -71,8 +71,7 @@ public class SysProfileController extends BaseController {
         SysUser sysUser = getSysUser();
         try {
             if (!file.isEmpty()) {
-                String avatar = FileUtils.upload(applicationProperties.getProfile() + "/avatar", file,
-                        MimeTypeUtils.IMAGE_EXTENSION);
+                String avatar = FileUtils.upload("avatar", file, MimeTypeUtils.IMAGE_EXTENSION);
                 sysUser.setAvatar(avatar);
                 if (userService.updateUserInfo(sysUser) > 0) {
                     setSysUser(userService.selectUserById(sysUser.getUserId()));

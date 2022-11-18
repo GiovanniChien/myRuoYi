@@ -28,8 +28,8 @@ public class OssAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(OssClient.class)
-    public OssClient ossClient(S3Client s3Client, S3Presigner s3Presigner) {
-        return new AwsS3Client(s3Client, s3Presigner);
+    public OssClient ossClient(S3Client s3Client, S3Presigner s3Presigner, S3Properties s3Properties) {
+        return new AwsS3Client(s3Client, s3Presigner, s3Properties.getBucketName(), s3Properties.isPrivateBucket());
     }
     
     @Bean

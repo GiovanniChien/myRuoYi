@@ -1,20 +1,16 @@
 package cn.chien.utils.file;
 
-import cn.chien.constant.Constants;
 import cn.chien.exception.file.FileNameLengthLimitExceededException;
 import cn.chien.exception.file.FileSizeLimitExceededException;
 import cn.chien.exception.file.InvalidExtensionException;
-import cn.chien.properties.ApplicationProperties;
-import cn.chien.utils.DateUtils;
+import cn.chien.oss.client.OssClient;
 import cn.chien.utils.StringUtils;
 import cn.chien.utils.spring.SpringUtils;
 import cn.chien.utils.uuid.Seq;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -33,42 +29,31 @@ public final class FileUtils {
      */
     public static final int DEFAULT_FILE_NAME_LENGTH = 100;
     
-    private static final ApplicationProperties applicationProperties = SpringUtils.getBean(ApplicationProperties.class);
+    private static final OssClient ossClient = SpringUtils.getBean(OssClient.class);
+    
+    public static String upload(MultipartFile file, String[] allowedExtension)
+            throws IOException, InvalidExtensionException {
+        return upload(null, file, allowedExtension);
+    }
     
     public static String upload(String baseDir, MultipartFile file, String[] allowedExtension)
             throws IOException, InvalidExtensionException {
-        int fileNamelength = Objects.requireNonNull(file.getOriginalFilename()).length();
-        if (fileNamelength > DEFAULT_FILE_NAME_LENGTH) {
+        int fileNameLength = Objects.requireNonNull(file.getOriginalFilename()).length();
+        if (fileNameLength > DEFAULT_FILE_NAME_LENGTH) {
             throw new FileNameLengthLimitExceededException(DEFAULT_FILE_NAME_LENGTH);
         }
         
         assertAllowed(file, allowedExtension);
         String fileName = extractFilename(file);
-        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
-        file.transferTo(Paths.get(absPath));
-        return getPathFileName(baseDir, fileName);
-    }
-    
-    private static File getAbsoluteFile(String uploadDir, String fileName) throws IOException {
-        File desc = new File(uploadDir + File.separator + fileName);
-        
-        if (!desc.exists()) {
-            if (!desc.getParentFile().exists()) {
-                desc.getParentFile().mkdirs();
-            }
+        if (StringUtils.isNotEmpty(baseDir)) {
+            fileName = baseDir + "/" + fileName;
         }
-        return desc;
-    }
-    
-    private static String getPathFileName(String uploadDir, String fileName) throws IOException
-    {
-        int dirLastIndex = applicationProperties.getProfile().length() + 1;
-        String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
-        return Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
+        ossClient.putObject(fileName, file.getInputStream());
+        return ossClient.getObjectUrl(fileName);
     }
     
     private static String extractFilename(MultipartFile file) {
-        return StringUtils.format("{}/{}_{}.{}", DateUtils.datePath(),
+        return StringUtils.format("{}_{}.{}",
                 FilenameUtils.getBaseName(file.getOriginalFilename()), Seq.getId(Seq.uploadSeqType),
                 getExtension(file));
     }

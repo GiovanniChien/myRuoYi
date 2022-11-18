@@ -101,8 +101,6 @@ ruoyi:
   demoEnabled: true
   # 获取ip地址开关
   addressEnabled: false
-  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: D:/upload_dir
   # 异步任务线程池配置
   threadpool:
     # 核心线程数大小
@@ -122,3 +120,7 @@ aws:
     endpoint: http://localhost:9000
     region: us-east-1
     pathStyleAccess: true
+    # 桶名称
+    bucketName: ruoyi
+    # 是否私有桶
+    privateBucket: false

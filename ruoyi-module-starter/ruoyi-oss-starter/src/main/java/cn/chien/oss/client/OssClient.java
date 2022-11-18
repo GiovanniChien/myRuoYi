@@ -23,6 +23,14 @@ public interface OssClient {
     /**
      * 获取url
      *
+     * @param objectName
+     * @return
+     */
+    String getObjectUrl(String objectName);
+    
+    /**
+     * 获取url
+     *
      * @param bucketName
      * @param objectName
      * @return
@@ -38,6 +46,13 @@ public interface OssClient {
      */
     String getObjectUrl(String bucketName, String objectName, boolean isPrivate);
     
+    /**
+     * 获取存储对象信息
+     *
+     * @param objectName
+     * @return
+     */
+    ResponseInputStream<GetObjectResponse> getObjectInfo(String objectName);
     
     /**
      * 获取存储对象信息
@@ -48,6 +63,17 @@ public interface OssClient {
      */
     ResponseInputStream<GetObjectResponse> getObjectInfo(String bucketName, String objectName);
     
+    /**
+     * 上传文件
+     *
+     * @param objectName
+     * @param stream
+     * @param size
+     * @return
+     * @throws IOException
+     */
+    PutObjectResponse putObject(String objectName, InputStream stream, long size)
+            throws IOException;
     
     /**
      * 上传文件
@@ -65,6 +91,10 @@ public interface OssClient {
     
     default PutObjectResponse putObject(String bucketName, String objectName, InputStream stream) throws IOException {
         return putObject(bucketName, objectName, stream, stream.available());
+    }
+    
+    default PutObjectResponse putObject(String objectName, InputStream stream) throws IOException {
+        return putObject(objectName, stream, stream.available());
     }
     
 }
