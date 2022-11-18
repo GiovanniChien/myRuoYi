@@ -1,6 +1,6 @@
 package cn.chien.config;
 
-import cn.chien.properties.SecurityProperties;
+import cn.chien.security.SecurityProperties;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.CodeGenerator;
@@ -18,23 +18,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnBean(SecurityProperties.class)
 public class CaptchaConfig {
-
-
+    
+    
     @ConditionalOnProperty(prefix = "security.user", name = "captchaType", havingValue = "math", matchIfMissing = true)
     @Bean
     public CodeGenerator mathGenerator() {
         return new MathGenerator(1);
     }
-
+    
     @ConditionalOnProperty(prefix = "security.user", name = "captchaType", havingValue = "code")
     @Bean
     public CodeGenerator codeGenerator() {
         return new RandomGenerator(4);
     }
-
+    
     @Bean
     public ShearCaptcha captcha() {
         return CaptchaUtil.createShearCaptcha(160, 60);
     }
-
+    
 }

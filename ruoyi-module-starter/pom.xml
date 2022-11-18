@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>ruoyi-oss-starter</module>
+        <module>ruoyi-security-starter</module>
+        <module>ruoyi-cache-starter</module>
     </modules>
     
     <properties>
