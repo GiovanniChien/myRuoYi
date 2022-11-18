@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
  */
 @SpringBootApplication(exclude = {RedisAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class})
 @MapperScan(basePackages = "cn.chien.**.mapper")
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class MyRuoYiApplication {
 
     public static void main(String[] args) {

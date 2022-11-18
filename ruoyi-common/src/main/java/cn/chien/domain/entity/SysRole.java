@@ -2,6 +2,7 @@ package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
 import cn.chien.domain.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +25,7 @@ public class SysRole extends BaseEntity {
      * 角色ID
      */
     @Excel(name = "角色序号", cellType = ColumnType.NUMERIC)
+    @TableId
     private Long roleId;
     
     /**

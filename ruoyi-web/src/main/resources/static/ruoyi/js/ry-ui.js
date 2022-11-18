@@ -736,6 +736,16 @@ var table = {
                     }
                 });
                 return selects;
+            },
+            // 获取form表单内容
+            val: function(select) {
+                let $form = $(select);
+                let data = {};
+                let value = $form.serializeArray();
+                $.each(value, function (index, item) {
+                    data[item.name] = item.value;
+                });
+                return data;
             }
         },
         // 弹出层封装处理
@@ -1231,7 +1241,8 @@ var table = {
                     url: url,
                     type: "post",
                     dataType: "json",
-                    data: data,
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
                     beforeSend: function (xhr) {
                         let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
                         if (csrfToken) {

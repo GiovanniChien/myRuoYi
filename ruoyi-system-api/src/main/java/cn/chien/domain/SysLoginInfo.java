@@ -1,6 +1,7 @@
 package cn.chien.domain;
 
 import cn.chien.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -22,6 +23,7 @@ public class SysLoginInfo extends BaseEntity {
      * ID
      */
     @Excel(name = "序号", cellType = Excel.ColumnType.NUMERIC)
+    @TableId
     private Long infoId;
     
     /**

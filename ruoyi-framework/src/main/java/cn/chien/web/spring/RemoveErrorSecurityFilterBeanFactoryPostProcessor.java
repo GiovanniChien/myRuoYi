@@ -16,7 +16,7 @@ public class RemoveErrorSecurityFilterBeanFactoryPostProcessor implements BeanFa
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         DefaultListableBeanFactory factory = (DefaultListableBeanFactory) beanFactory;
-        factory.removeBeanDefinition("errorPageSecurityInterceptor");
+        factory.removeBeanDefinition("errorPageSecurityFilter");
     }
 
 }
