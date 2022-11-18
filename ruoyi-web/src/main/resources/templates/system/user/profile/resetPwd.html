@@ -50,17 +50,7 @@
         $("#form-user-resetPwd").validate({
             rules:{
                 oldPassword:{
-                    required:true,
-                    remote: {
-                        url: ctx + "system/user/profile/checkPassword",
-                        type: "get",
-                        dataType: "json",
-                        data: {
-                            password: function() {
-                                return $("input[name='oldPassword']").val();
-                            }
-                        }
-                    }
+                    required:true
                 },
                 newPassword: {
                     required: true,
@@ -74,8 +64,7 @@
             },
             messages: {
                 oldPassword: {
-                    required: "请输入原密码",
-                    remote: "原密码错误"
+                    required: "请输入原密码"
                 },
                 newPassword: {
                     required: "请输入新密码",
@@ -95,7 +84,12 @@
             var chrtype = [[${#strings.defaultString(@config.getKey('sys.account.chrtype'), 0)}]];
             var password = $("#newPassword").val();
             if ($.validate.form() && checkpwd(chrtype, password)) {
-                $.operate.save(ctx + "system/user/profile/resetPwd", $('#form-user-resetPwd').serialize());
+                // let data = $('#form-user-resetPwd').form();
+                let data = $.form.val('#form-user-resetPwd');
+                data.oldPassword = btoa(data.oldPassword);
+                data.newPassword = btoa(data.newPassword);
+                delete data.confirmPassword;
+                $.operate.saveModal(ctx + "system/user/profile/resetPwd", data);
             }
         }
     </script>

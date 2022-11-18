@@ -7,7 +7,6 @@ import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.enums.BusinessType;
-import cn.chien.properties.ApplicationProperties;
 import cn.chien.request.ModifyPasswordRequest;
 import cn.chien.request.UserInfoModifyRequest;
 import cn.chien.service.ISysUserService;
@@ -44,8 +43,6 @@ public class SysProfileController extends BaseController {
     
     private final ISysUserService userService;
     
-    private final ApplicationProperties applicationProperties;
-    
     private final PasswordEncoder passwordEncoder;
     
     @GetMapping
@@ -62,6 +59,12 @@ public class SysProfileController extends BaseController {
         SysUser sysUser = getSysUser();
         mmap.put("user", userService.selectUserById(sysUser.getUserId()));
         return prefix + "/avatar";
+    }
+    
+    @GetMapping("/resetPwd")
+    public String resetPwdView(ModelMap modelMap) {
+        modelMap.put("user", userService.selectUserById(AuthThreadLocal.getUserId()));
+        return prefix + "/resetPwd";
     }
     
     @PostMapping("/updateAvatar")

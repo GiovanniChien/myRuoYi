@@ -1,23 +1,32 @@
 package cn.chien.controller;
 
 import cn.chien.controller.base.BaseController;
+import cn.chien.core.auth.AuthThreadLocal;
+import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.text.Convert;
 import cn.chien.domain.entity.SysMenu;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.properties.ApplicationProperties;
 import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysMenuService;
+import cn.chien.service.ISysUserService;
 import cn.chien.utils.DateUtils;
 import cn.chien.utils.ServletUtils;
 import cn.chien.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +43,10 @@ public class SysIndexController extends BaseController {
     private final ISysConfigService configService;
     
     private final ApplicationProperties applicationProperties;
+    
+    private final PasswordEncoder passwordEncoder;
+    
+    private final ISysUserService sysUserService;
     
     @GetMapping("/index")
     public String index(ModelMap mmap, HttpSession session) {
@@ -73,10 +86,40 @@ public class SysIndexController extends BaseController {
     }
     
     @GetMapping("/system/main")
-    public String main(ModelMap mmap)
-    {
+    public String main(ModelMap mmap) {
         mmap.put("version", applicationProperties.getVersion());
         return "main";
+    }
+    
+    @GetMapping("/system/switchSkin")
+    public String switchSkin() {
+        return "skin";
+    }
+    
+    @GetMapping("/system/menuStyle/{style}")
+    public void menuStyle(@PathVariable String style, HttpServletResponse response) {
+        Cookie cookie = new Cookie("nav-style", style);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+    
+    @GetMapping("/lockscreen")
+    public String lockscreen(ModelMap mmap, HttpSession httpSession) {
+        mmap.put("user", getSysUser());
+        httpSession.setAttribute("lockscreen", true);
+        return "lock";
+    }
+    
+    @PostMapping("/unlockscreen")
+    @ResponseBody
+    public AjaxResult unlockscreen(String password) {
+        password = new String(Base64.getDecoder().decode(password));
+        SysUser user = sysUserService.selectUserById(AuthThreadLocal.getUserId());
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            ServletUtils.getSession().removeAttribute("lockscreen");
+            return AjaxResult.success();
+        }
+        return AjaxResult.error("密码不正确，请重新输入。");
     }
     
     public String contentMainClass(Boolean footer, Boolean tagsView) {

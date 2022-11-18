@@ -93,9 +93,13 @@
             url: ctx + "unlockscreen",
             type: "post",
             dataType: "json",
-            data: { password: password },
-            beforeSend: function() {
-            	index = layer.load(2, {shade: false});
+            data: { password: btoa(password) },
+            beforeSend: function(xhr) {
+            	  index = layer.load(2, {shade: false});
+                let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+                if (csrfToken) {
+                    xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+                }
             },
             success: function(result) {
                 if (result.code == web_status.SUCCESS) {

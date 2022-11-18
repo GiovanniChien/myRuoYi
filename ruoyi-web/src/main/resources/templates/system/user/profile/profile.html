@@ -295,6 +295,9 @@
     $("#form-user-resetPwd").validate({
         onkeyup: false,
         rules: {
+            oldPassword:{
+                required:true
+            },
             newPassword: {
                 required: true,
                 minlength: 6,
@@ -306,6 +309,9 @@
             }
         },
         messages: {
+            oldPassword: {
+                required: "请输入原密码"
+            },
             newPassword: {
                 required: "请输入新密码",
                 minlength: "密码不能小于6个字符",
