@@ -1,2 +1,3 @@
 cn.chien.security.UserInfoSuccessHandler
+cn.chien.security.PermissionSuccessHandler
 cn.chien.security.LogSuccessHandler

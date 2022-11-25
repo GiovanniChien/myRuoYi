@@ -1,0 +1,25 @@
+<dialect
+    xmlns="http://www.thymeleaf.org/extras/dialect"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.thymeleaf.org/extras/dialect
+	                    http://www.thymeleaf.org/xsd/thymeleaf-extras-dialect-3.0.xsd"
+    prefix="ruoyi"
+    namespace-url="https://www.thymeleaf.org/ruoyi"
+    namespace-strict="false"
+    class="cn.chien.security.thymeleaf.dialect.RuoyiDialect">
+    
+    <attribute-processor name="hasAnyPermissions"
+        class="cn.chien.security.thymeleaf.processor.attribute.HasAnyPermissionsAttrProcessor">
+        <documentation><![CDATA[
+				Displays only if the current user has one of the specified permission from a comma-separated list of permission names.
+		]]></documentation>
+    </attribute-processor>
+    
+    <element-processor name="hasAllPermissions"
+        class="cn.chien.security.thymeleaf.processor.element.HasAnyPermissionsElementProcessor">
+        <documentation><![CDATA[
+			Displays only if the current Subject (user) 'has all' (implies) the specified permission (i.e the user has the specified ability).
+		]]></documentation>
+    </element-processor>
+    
+</dialect>

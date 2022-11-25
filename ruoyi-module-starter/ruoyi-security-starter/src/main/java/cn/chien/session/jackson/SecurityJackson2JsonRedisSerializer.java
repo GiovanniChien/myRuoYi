@@ -1,5 +1,6 @@
 package cn.chien.session.jackson;
 
+import cn.chien.security.access.SecurityUser;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -58,6 +59,8 @@ public class SecurityJackson2JsonRedisSerializer implements RedisSerializer<Obje
         // simply setting {@code mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)} does not help here since we need
         // the type hint embedded for deserialization using the default typing feature.
         registerNullValueSerializer(mapper, classPropertyTypeName);
+        
+        mapper.addMixIn(SecurityUser.class, SecurityUserMixIn.class);
         
         if (StringUtils.hasText(classPropertyTypeName)) {
             mapper.activateDefaultTypingAsProperty(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL,

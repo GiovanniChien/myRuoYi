@@ -1,15 +1,20 @@
 package cn.chien.service.impl;
 
 import cn.chien.constant.UserConstants;
+import cn.chien.core.page.TableDataInfo;
 import cn.chien.domain.SysPost;
 import cn.chien.domain.entity.SysRole;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.mapper.SysPostMapper;
 import cn.chien.mapper.SysRoleMapper;
 import cn.chien.mapper.SysUserMapper;
+import cn.chien.request.UserListPageQueryRequest;
 import cn.chien.service.ISysUserService;
+import cn.chien.util.PageUtil;
 import cn.chien.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -34,8 +39,10 @@ public class SysUserServiceImpl implements ISysUserService {
     private SysPostMapper postMapper;
     
     @Override
-    public List<SysUser> selectUserList(SysUser user) {
-        return null;
+    public TableDataInfo selectUserList(UserListPageQueryRequest user) {
+        IPage<SysUser> page = new Page<>(user.getPageNum(), user.getPageSize());
+        IPage<SysUser> pageRes = sysUserMapper.selectUserList(page, user);
+        return PageUtil.getTableDataInfo(pageRes);
     }
     
     @Override

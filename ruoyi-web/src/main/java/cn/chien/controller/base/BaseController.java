@@ -1,6 +1,7 @@
 package cn.chien.controller.base;
 
 import cn.chien.core.domain.AjaxResult;
+import cn.chien.domain.BaseEntity;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.utils.DateUtils;
 import cn.chien.utils.ServletUtils;
@@ -40,7 +41,7 @@ public class BaseController {
      * 设置请求分页数据
      */
     protected void startPage() {
-//        PageUtils.startPage();
+    
     }
     
     /**

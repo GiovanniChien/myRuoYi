@@ -34,6 +34,7 @@ public class AccessEntryPoint implements AuthenticationEntryPoint {
                 return;
             }
             response.sendRedirect("/login");
+            return;
         }
         if (ServletUtils.isAjaxRequest(request)) {
             exceptionPublisher.process(authException, new HttpRequestResponseHolder(request, response));

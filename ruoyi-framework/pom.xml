@@ -69,7 +69,7 @@
         </dependency>
         <dependency>
             <groupId>cn.chien</groupId>
-            <artifactId>ruoyi-security-starter</artifactId>
+            <artifactId>ruoyi-security-thymeleaf-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

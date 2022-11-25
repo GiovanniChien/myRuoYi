@@ -82,7 +82,7 @@ var table = {
                 $('#' + options.id).bootstrapTable({
                     id: options.id,
                     url: options.url,                                   // 请求后台的URL（*）
-                    contentType: "application/x-www-form-urlencoded",   // 编码类型
+                    contentType: "application/json",                    // 编码类型
                     method: options.method,                             // 请求方式（*）
                     cache: false,                                       // 是否使用缓存
                     height: options.height,                             // 表格的高度

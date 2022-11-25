@@ -44,7 +44,7 @@ public class SysUserDetailsService implements UserDetailsService {
         return createUser(sysUser);
     }
 
-    private User createUser(SysUser sysUser) {
+    private SecurityUser createUser(SysUser sysUser) {
         boolean enabled = UserConstants.NORMAL.equals(sysUser.getStatus());
         boolean accountNonExpired = UserStatus.OK.getCode().equals(sysUser.getDelFlag());
         List<SysRole> roles = sysUser.getRoles();
@@ -53,7 +53,7 @@ public class SysUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getRoleKey()));
         }
         Logins.LOGIN_USER.set(sysUser);
-        return new User(sysUser.getLoginName(), sysUser.getPassword(), enabled, accountNonExpired, true, true, authorities);
+        return new SecurityUser(sysUser.getUserId(), sysUser.getLoginName(), sysUser.getPassword(), enabled, accountNonExpired, true, true, authorities);
     }
 
     private boolean checkAccountExpired(Date pwdUpdateDate) {

@@ -1,6 +1,8 @@
 package cn.chien.service;
 
+import cn.chien.core.page.TableDataInfo;
 import cn.chien.domain.entity.SysUser;
+import cn.chien.request.UserListPageQueryRequest;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public interface ISysUserService
      * @param user 用户信息
      * @return 用户信息集合信息
      */
-    public List<SysUser> selectUserList(SysUser user);
+    public TableDataInfo selectUserList(UserListPageQueryRequest user);
 
     /**
      * 根据条件分页查询已分配用户角色列表

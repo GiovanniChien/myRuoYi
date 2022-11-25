@@ -1,7 +1,10 @@
 package cn.chien.mapper;
 
 import cn.chien.domain.entity.SysUser;
+import cn.chien.request.UserListPageQueryRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param sysUser 用户信息
      * @return 用户信息集合信息
      */
-    List<SysUser> selectUserList(SysUser sysUser);
+    IPage<SysUser> selectUserList(IPage<SysUser> page, @Param("user") UserListPageQueryRequest sysUser);
 
     /**
      * 根据条件分页查询已配用户角色列表
