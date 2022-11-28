@@ -92,7 +92,7 @@ public final class PrincipalUtil {
                 } else if (WILDCARD_TOKEN.equals(otherParts.get(j))) {
                     dp[i][j] = dp[i - 1][j - 1] || dp[i][j - 1];
                 } else {
-                    dp[i][j] = parts.get(i).equals(otherParts.get(j));
+                    dp[i][j] = dp[i - 1][j - 1] && parts.get(i).equals(otherParts.get(j));
                 }
             }
         }

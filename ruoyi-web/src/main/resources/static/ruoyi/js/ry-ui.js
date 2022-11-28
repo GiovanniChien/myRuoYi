@@ -1429,21 +1429,26 @@ var table = {
                     view: options.view,
                     data: options.data
                 };
-                $.get(options.url, function(data) {
+                $.get(options.url, function(res) {
                     var treeId = $("#treeId").val();
-                    tree = $.fn.zTree.init($("#" + options.id), setting, data);
-                    $._tree = tree;
-                    for (var i = 0; i < options.expandLevel; i++) {
-                        var nodes = tree.getNodesByParam("level", i);
-                        for (var j = 0; j < nodes.length; j++) {
-                            tree.expandNode(nodes[j], true, false, false);
+                    if (res.code === web_status.SUCCESS) {
+                        tree = $.fn.zTree.init($("#" + options.id), setting, res.data);
+                        $._tree = tree;
+                        for (var i = 0; i < options.expandLevel; i++) {
+                            var nodes = tree.getNodesByParam("level", i);
+                            for (var j = 0; j < nodes.length; j++) {
+                                tree.expandNode(nodes[j], true, false, false);
+                            }
                         }
-                    }
-                    var node = tree.getNodesByParam("id", treeId, null)[0];
-                    $.tree.selectByIdName(treeId, node);
-                    // 回调tree方法
-                    if(typeof(options.callBack) === "function"){
-                        options.callBack(tree);
+                        var node = tree.getNodesByParam("id", treeId, null)[0];
+                        $.tree.selectByIdName(treeId, node);
+                        // 回调tree方法
+                        if (typeof (options.callBack) === "function") {
+                            options.callBack(tree);
+                        }
+                    } else {
+                        $.modal.alertWarning(res.msg);
+                        $.fn.zTree.destroy(treeId);
                     }
                 });
             },
