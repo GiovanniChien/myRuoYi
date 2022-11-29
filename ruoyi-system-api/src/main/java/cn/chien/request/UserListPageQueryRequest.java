@@ -1,5 +1,6 @@
 package cn.chien.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,9 +22,11 @@ public class UserListPageQueryRequest extends BasePageRequest {
     private String phonenumber;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date beginTime;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
     
     private Long deptId;

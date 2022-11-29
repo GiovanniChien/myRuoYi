@@ -20,7 +20,7 @@
     <script th:inline="javascript"> var ctx = [[@{/}]]; var lockscreen = [[${session.lockscreen}]]; if(lockscreen){window.top.location=ctx+"lockscreen";} </script>
     <a id="scroll-up" href="#" class="btn btn-sm display"><i class="fa fa-angle-double-up"></i></a>
 	<script th:src="@{/js/jquery.js?v=3.6.0}"></script>
-	<script th:src="@{/js/bootstrap.min.js?v=3.3.7}"></script>
+	<script th:src="@{/js/bootstrap.js?v=3.3.7}"></script>
 	<!-- bootstrap-table 表格插件 -->
 	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js?v=1.18.3}"></script>
 	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js?v=1.18.3}"></script>
@@ -103,7 +103,7 @@
     <link th:href="@{/ajax/libs/jasny/jasny-bootstrap.min.css?v=3.1.3}" rel="stylesheet"/>
 </div>
 <div th:fragment="jasny-bootstrap-js">
-    <script th:src="@{/ajax/libs/jasny/jasny-bootstrap.min.js?v=3.1.3}"></script>
+    <script th:src="@{/ajax/libs/jasny/jasny-bootstrap.js?v=3.1.3}"></script>
 </div>
 
 <!-- fileinput文件上传插件 -->

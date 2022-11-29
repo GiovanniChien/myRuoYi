@@ -74,10 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="user.phonenumber != null and user.phonenumber != ''">
 			AND u.phonenumber like concat('%', #{user.phonenumber}, '%')
 		</if>
-		<if test="user.beginTime != null and user.beginTime != ''"><!-- 开始时间检索 -->
+		<if test="user.beginTime != null"><!-- 开始时间检索 -->
 			AND u.create_time &gt;= #{user.beginTime}
 		</if>
-		<if test="user.endTime != null and user.endTime != ''"><!-- 结束时间检索 -->
+		<if test="user.endTime != null"><!-- 结束时间检索 -->
 			AND u.create_time &lt;= #{user.endTime}
 		</if>
 		<if test="user.deptId != null and user.deptId != 0">
