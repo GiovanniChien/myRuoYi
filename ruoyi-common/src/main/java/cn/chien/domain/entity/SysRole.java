@@ -11,6 +11,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import java.util.Set;
+
 import static cn.chien.annotation.Excel.*;
 
 /**
@@ -77,6 +79,11 @@ public class SysRole extends BaseEntity {
      * 部门组（数据权限）
      */
     private Long[] deptIds;
+    
+    /**
+     * 角色菜单权限
+     */
+    private transient Set<String> permissions;
     
     public SysRole() {
     
@@ -178,6 +185,14 @@ public class SysRole extends BaseEntity {
     
     public void setDeptIds(Long[] deptIds) {
         this.deptIds = deptIds;
+    }
+    
+    public Set<String> getPermissions() {
+        return permissions;
+    }
+    
+    public void setPermissions(Set<String> permissions) {
+        this.permissions = permissions;
     }
     
     @Override

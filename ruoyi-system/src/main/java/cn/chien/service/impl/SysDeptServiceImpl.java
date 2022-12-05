@@ -1,5 +1,6 @@
 package cn.chien.service.impl;
 
+import cn.chien.annotation.DataScope;
 import cn.chien.constant.UserConstants;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.text.Convert;
@@ -38,7 +39,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @return 部门信息集合
      */
     @Override
-    //    @DataScope(deptAlias = "d")
+    @DataScope(deptAlias = "d")
     public List<SysDept> selectDeptList(SysDept dept) {
         return deptMapper.selectDeptList(dept);
     }
@@ -50,7 +51,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @return 所有部门信息
      */
     @Override
-    //    @DataScope(deptAlias = "d")
+    @DataScope(deptAlias = "d")
     public List<Ztree> selectDeptTree(SysDept dept) {
         List<SysDept> deptList = deptMapper.selectDeptList(dept);
         List<Ztree> ztrees = initZtree(deptList);
@@ -64,11 +65,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @return 所有部门信息
      */
     @Override
-    //    @DataScope(deptAlias = "d")
+    @DataScope(deptAlias = "d")
     public List<Ztree> selectDeptTreeExcludeChild(SysDept dept) {
         Long excludeId = dept.getExcludeId();
         List<SysDept> depts = deptMapper.selectDeptList(dept);
-        if (excludeId.intValue() > 0) {
+        if (excludeId != null && excludeId.intValue() > 0) {
             depts.removeIf(d -> d.getDeptId().intValue() == excludeId || ArrayUtils.contains(
                     StringUtils.split(d.getAncestors(), ","), excludeId + ""));
         }

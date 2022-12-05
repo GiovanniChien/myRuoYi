@@ -24,6 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         for (AuthThreadLocal.AuthField authField : authFields) {
             AuthThreadLocal.set(authField.fieldName, session.getAttribute(authField.fieldName));
         }
+        AuthThreadLocal.set("sysUser", session.getAttribute("sysUser"));
         return true;
     }
     

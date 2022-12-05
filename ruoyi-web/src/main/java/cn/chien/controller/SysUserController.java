@@ -1,23 +1,42 @@
 package cn.chien.controller;
 
+import cn.chien.annotation.BusinessLog;
+import cn.chien.constant.UserConstants;
 import cn.chien.controller.base.BaseController;
+import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.page.TableDataInfo;
+import cn.chien.core.text.Convert;
 import cn.chien.domain.entity.SysDept;
+import cn.chien.domain.entity.SysRole;
 import cn.chien.domain.entity.SysUser;
+import cn.chien.enums.BusinessType;
 import cn.chien.request.UserListPageQueryRequest;
 import cn.chien.security.auth.annotation.RequiresPermissions;
+import cn.chien.security.util.PrincipalUtil;
+import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysDeptService;
+import cn.chien.service.ISysPostService;
+import cn.chien.service.ISysRoleService;
 import cn.chien.service.ISysUserService;
+import cn.chien.utils.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static cn.chien.core.auth.AuthThreadLocal.getLoginName;
 
 /**
  * @author qian.diqi
@@ -35,11 +54,14 @@ public class SysUserController extends BaseController {
     @Autowired
     private ISysDeptService deptService;
     
-    //    @GetMapping("sysUser/{loginName}")
-    //    @ResponseBody
-    //    public SysUser getSysUserByLoginName(@PathVariable("loginName") String loginName) {
-    //        return sysUserService.selectUserByLoginName(loginName);
-    //    }
+    @Autowired
+    private ISysRoleService roleService;
+    
+    @Autowired
+    private ISysPostService postService;
+    
+    @Autowired
+    private ISysConfigService configService;
     
     /**
      * 校验手机号码
@@ -56,10 +78,91 @@ public class SysUserController extends BaseController {
         return sysUserService.checkEmailUnique(user);
     }
     
+    @PostMapping("/checkLoginNameUnique")
+    @ResponseBody
+    public String checkLoginNameUnique(SysUser user) {
+        return sysUserService.checkLoginNameUnique(user.getLoginName());
+    }
+    
     @RequiresPermissions("system:user:view")
     @GetMapping()
     public String user() {
         return prefix + "/user";
+    }
+    
+    @GetMapping("/add")
+    public String add(ModelMap mmap) {
+        mmap.put("roles", roleService.selectRoleAll().stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        mmap.put("posts", postService.selectPostAll());
+        return prefix + "/add";
+    }
+    
+    /**
+     * 新增保存用户
+     */
+    @RequiresPermissions("system:user:add")
+    @BusinessLog(title = "用户管理", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(@RequestBody @Validated SysUser user) {
+        if (UserConstants.USER_NAME_NOT_UNIQUE.equals(sysUserService.checkLoginNameUnique(user.getLoginName()))) {
+            return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
+        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && UserConstants.USER_PHONE_NOT_UNIQUE.equals(
+                sysUserService.checkPhoneUnique(user))) {
+            return error("新增用户'" + user.getLoginName() + "'失败，手机号码已存在");
+        } else if (StringUtils.isNotEmpty(user.getEmail()) && UserConstants.USER_EMAIL_NOT_UNIQUE.equals(
+                sysUserService.checkEmailUnique(user))) {
+            return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
+        }
+        user.setPassword(configService.selectConfigByKey("sys.user.initPassword"));
+        user.setCreateBy(getLoginName());
+        return toAjax(sysUserService.insertUser(user));
+    }
+    
+    /**
+     * 修改用户
+     */
+    @RequiresPermissions("system:user:edit")
+    @GetMapping("/edit/{userId}")
+    public String edit(@PathVariable("userId") Long userId, ModelMap mmap) {
+        sysUserService.checkUserDataScope(userId);
+        List<SysRole> roles = roleService.selectRolesByUserId(userId);
+        mmap.put("user", sysUserService.selectUserById(userId));
+        mmap.put("roles", SysUser.isAdmin(userId) ? roles
+                : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        mmap.put("posts", postService.selectPostsByUserId(userId));
+        return prefix + "/edit";
+    }
+    
+    @RequiresPermissions("system:user:edit")
+    @BusinessLog(title = "用户管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(@RequestBody @Validated SysUser user) {
+        sysUserService.checkUserAllowed(user);
+        sysUserService.checkUserDataScope(user.getUserId());
+        if (StringUtils.isNotEmpty(user.getPhonenumber()) && UserConstants.USER_PHONE_NOT_UNIQUE.equals(
+                sysUserService.checkPhoneUnique(user))) {
+            return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
+        } else if (StringUtils.isNotEmpty(user.getEmail()) && UserConstants.USER_EMAIL_NOT_UNIQUE.equals(
+                sysUserService.checkEmailUnique(user))) {
+            return error("修改用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
+        }
+        user.setUpdateBy(getLoginName());
+        PrincipalUtil.forceLogout(user.getLoginName());
+        return toAjax(sysUserService.updateUser(user));
+    }
+    
+    @RequiresPermissions("system:user:remove")
+    @BusinessLog(title = "用户管理", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(@RequestParam("ids") String idStr) {
+        Long[] ids = Convert.toLongArray(idStr);
+        if (ArrayUtils.contains(ids, AuthThreadLocal.getUserId())) {
+            return error("当前用户不能删除");
+        }
+        return toAjax(sysUserService.deleteUserByIds(ids));
     }
     
     @PostMapping("/list")
@@ -74,5 +177,12 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public AjaxResult deptTreeData() {
         return AjaxResult.success(deptService.selectDeptTree(new SysDept()));
+    }
+    
+    @RequiresPermissions("system:user:list")
+    @GetMapping("/selectDeptTree/{deptId}")
+    public String selectDeptTree(@PathVariable("deptId") Long deptId, ModelMap mmap) {
+        mmap.put("dept", deptService.selectDeptById(deptId));
+        return prefix + "/deptTree";
     }
 }

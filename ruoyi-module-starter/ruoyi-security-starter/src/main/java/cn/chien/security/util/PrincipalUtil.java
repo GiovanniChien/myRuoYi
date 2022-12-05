@@ -3,15 +3,20 @@ package cn.chien.security.util;
 import cn.chien.constant.UserConstants;
 import cn.chien.security.access.SecurityUser;
 import cn.chien.utils.ServletUtils;
+import cn.chien.utils.spring.SpringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
+import org.springframework.session.SessionRepository;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -117,5 +122,16 @@ public final class PrincipalUtil {
             }
         }
         return false;
+    }
+    
+    public static void forceLogout(String loginName) {
+        SessionRepository<?> sessionRepository = SpringUtils.getBean(SessionRepository.class);
+        if (sessionRepository instanceof FindByIndexNameSessionRepository<?> findByIndexNameSessionRepository) {
+            Map<String, ?> principalNames = findByIndexNameSessionRepository.findByPrincipalName(loginName);
+            for (Map.Entry<String, ?> entry : principalNames.entrySet()) {
+                Session session = (Session) entry.getValue();
+                sessionRepository.deleteById(session.getId());
+            }
+        }
     }
 }

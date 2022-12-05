@@ -715,25 +715,17 @@ var table = {
             },
             // 获取选中复选框项
             selectCheckeds: function(name) {
-                var checkeds = "";
+                var checkeds = [];
                 $('input:checkbox[name="' + name + '"]:checked').each(function(i) {
-                    if (0 == i) {
-                        checkeds = $(this).val();
-                    } else {
-                        checkeds += ("," + $(this).val());
-                    }
+                    checkeds.push($(this).val());
                 });
                 return checkeds;
             },
             // 获取选中下拉框项
             selectSelects: function(name) {
-                var selects = "";
+                var selects = [];
                 $('#' + name + ' option:selected').each(function (i) {
-                    if (0 == i) {
-                        selects = $(this).val();
-                    } else {
-                        selects += ("," + $(this).val());
-                    }
+                    selects.push($(this).val());
                 });
                 return selects;
             },
@@ -1067,6 +1059,10 @@ var table = {
             get: function(url, callback) {
                 $.operate.submit(url, "get", "json", "", callback);
             },
+            // delete请求传输
+            delete: function (url, callback) {
+                $.operate.submit(url, 'delete', 'json', '', callback);
+            },
             // 详细信息
             detail: function(id, width, height) {
                 table.set();
@@ -1271,9 +1267,13 @@ var table = {
                 var config = {
                     url: url,
                     type: "post",
-                    dataType: "json",
-                    data: data,
-                    beforeSend: function () {
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    beforeSend: function (xhr) {
+                        let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+                        if (csrfToken) {
+                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+                        }
                         $.modal.loading("正在处理中，请稍候...");
                     },
                     success: function(result) {
@@ -1341,15 +1341,20 @@ var table = {
                 if (result.code == web_status.SUCCESS) {
                     var topWindow = $(window.parent.document);
                     var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
-                    var $contentWindow = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow)[0].contentWindow;
-                    $.modal.close();
-                    $contentWindow.$.modal.msgSuccess(result.msg);
-                    $contentWindow.$(".layui-layer-padding").removeAttr("style");
-                    if ($contentWindow.table.options.type == table_type.bootstrapTable) {
-                        $contentWindow.$.table.refresh();
-                    } else if ($contentWindow.table.options.type == table_type.bootstrapTreeTable) {
-                        $contentWindow.$.treeTable.refresh();
+                    var topWindow = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow)[0];
+                    if ($.common.isNotEmpty(topWindow) && $.common.isNotEmpty(currentId)) {
+                        var $contentWindow = topWindow.contentWindow;
+                        $contentWindow.$.modal.msgSuccess(result.msg);
+                        $contentWindow.$(".layui-layer-padding").removeAttr("style");
+                        if ($contentWindow.table.options.type == table_type.bootstrapTable) {
+                            $contentWindow.$.table.refresh();
+                        } else if ($contentWindow.table.options.type == table_type.bootstrapTreeTable) {
+                            $contentWindow.$.treeTable.refresh();
+                        }
+                    } else {
+                        $.modal.msgSuccess(result.msg);
                     }
+                    $.modal.close();
                     $.modal.closeTab();
                 } else if (result.code == web_status.WARNING) {
                     $.modal.alertWarning(result.msg)

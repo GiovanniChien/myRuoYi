@@ -1,5 +1,6 @@
 package cn.chien.core.auth;
 
+import cn.chien.domain.entity.SysUser;
 import org.springframework.core.NamedInheritableThreadLocal;
 
 import java.util.HashMap;
@@ -41,6 +42,14 @@ public final class AuthThreadLocal {
     
     public static Long getUserId() {
         return getLong(AuthField.USER_ID.fieldName);
+    }
+    
+    public static SysUser getUser() {
+        return (SysUser) get("sysUser");
+    }
+    
+    public static String getLoginName() {
+        return getString(AuthField.LOGIN_NAME.fieldName);
     }
     
     public static void remove() {

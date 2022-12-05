@@ -1,9 +1,11 @@
 package cn.chien.security.auth.handler;
 
+import cn.chien.security.auth.PermissionContextHolder;
 import cn.chien.security.auth.annotation.RequiresPermissions;
 import cn.chien.security.auth.enums.Logical;
 import cn.chien.security.exception.UnAuthorizedException;
 import cn.chien.security.util.PrincipalUtil;
+import cn.chien.utils.StringUtils;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.core.AuthenticationException;
 
@@ -28,6 +30,7 @@ public class RequiresPermissionsHandler implements AuthMethodHandler {
         }
         String[] perms = rpAnnotation.value();
         Logical logical = rpAnnotation.logical();
+        PermissionContextHolder.setContext(StringUtils.join(perms, ','));
         for (String perm : perms) {
             if (!PrincipalUtil.isPermitted(perm)) {
                 if (Logical.AND.equals(logical)) {

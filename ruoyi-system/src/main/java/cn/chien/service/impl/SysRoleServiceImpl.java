@@ -1,5 +1,6 @@
 package cn.chien.service.impl;
 
+import cn.chien.annotation.DataScope;
 import cn.chien.constant.UserConstants;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.text.Convert;
@@ -53,7 +54,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 角色数据集合信息
      */
     @Override
-    //    @DataScope(deptAlias = "d")
+    @DataScope(deptAlias = "d")
     public List<SysRole> selectRoleList(SysRole role) {
         return roleMapper.selectRoleList(role);
     }
@@ -104,7 +105,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<SysRole> selectRoleAll() {
-        return SpringUtils.getAopProxy(this).selectRoleList(new SysRole());
+        return SpringUtils.getBean(this.getClass()).selectRoleList(new SysRole());
     }
     
     /**

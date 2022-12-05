@@ -92,7 +92,7 @@ public interface ISysUserService
      * @return 结果
      * @throws Exception 异常
      */
-    public int deleteUserByIds(String ids);
+    public int deleteUserByIds(Long[] ids);
 
     /**
      * 保存用户信息

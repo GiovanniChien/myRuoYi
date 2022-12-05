@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * @author qiandq3
  * @date 2022/11/28
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class AuthPermissionAopAutoConfiguration {
     
     @Bean
