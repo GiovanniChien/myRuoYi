@@ -196,7 +196,8 @@ public class SysUserServiceImpl implements ISysUserService {
     
     @Override
     public void insertUserAuth(Long userId, Long[] roleIds) {
-    
+        userRoleMapper.deleteUserRoleByUserId(userId);
+        insertUserRole(userId, roleIds);
     }
     
     @Override

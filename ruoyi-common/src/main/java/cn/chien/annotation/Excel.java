@@ -62,7 +62,7 @@ public @interface Excel
     /**
      * 导出时在excel中每个列的高度 单位为字符
      */
-    public double height() default 14;
+    public short height() default 20;
 
     /**
      * 导出时在excel中每个列的宽 单位为字符
@@ -108,6 +108,21 @@ public @interface Excel
      * 导出类型（0数字 1字符串）
      */
     public ColumnType cellType() default ColumnType.STRING;
+    
+    /**
+     * 导出列头背景色
+     */
+    public IndexedColors headerBackgroundColor() default IndexedColors.GREY_50_PERCENT;
+    
+    /**
+     * 导出列头字体颜色
+     */
+    public IndexedColors headerColor() default IndexedColors.BLACK;
+    
+    /**
+     * 导出单元格背景色
+     */
+    public IndexedColors backgroundColor() default IndexedColors.WHITE;
 
     /**
      * 导出字体颜色

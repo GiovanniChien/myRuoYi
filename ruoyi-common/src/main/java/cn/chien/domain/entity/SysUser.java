@@ -130,6 +130,7 @@ public class SysUser extends BaseEntity {
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)})
     private SysDept dept;
     
+    @Excel(name = "角色列表", type = Type.IMPORT)
     private List<SysRole> roles;
     
     /**

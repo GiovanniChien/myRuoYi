@@ -1063,6 +1063,10 @@ var table = {
             delete: function (url, callback) {
                 $.operate.submit(url, 'delete', 'json', '', callback);
             },
+            // put请求传输
+            put: function (url, callback) {
+                $.operate.submit(url, 'put', 'json', '', callback);
+            },
             // 详细信息
             detail: function(id, width, height) {
                 table.set();

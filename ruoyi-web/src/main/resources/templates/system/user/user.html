@@ -233,8 +233,7 @@
 
     /* 用户管理-重置密码 */
     function resetPwd(userId) {
-        var url = prefix + '/resetPwd/' + userId;
-        $.modal.open("重置密码", url, '800', '300');
+        $.operate.put(prefix + '/resetPwd/' + userId);
     }
 
     /* 用户管理-分配角色 */
@@ -275,7 +274,7 @@
       <div class="mt10 pt5">
         <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。">
         是否更新已经存在的用户数据
-        &nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i>
+        &nbsp; <a href="system/user/importTemplate" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i>
         下载模板</a>
       </div>
       <font color="red" class="pull-left mt10">

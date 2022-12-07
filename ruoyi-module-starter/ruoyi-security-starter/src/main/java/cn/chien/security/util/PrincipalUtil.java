@@ -3,6 +3,7 @@ package cn.chien.security.util;
 import cn.chien.constant.UserConstants;
 import cn.chien.security.access.SecurityUser;
 import cn.chien.utils.ServletUtils;
+import cn.chien.utils.StringUtils;
 import cn.chien.utils.spring.SpringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -125,6 +126,9 @@ public final class PrincipalUtil {
     }
     
     public static void forceLogout(String loginName) {
+        if (StringUtils.isEmpty(loginName)) {
+            return;
+        }
         SessionRepository<?> sessionRepository = SpringUtils.getBean(SessionRepository.class);
         if (sessionRepository instanceof FindByIndexNameSessionRepository<?> findByIndexNameSessionRepository) {
             Map<String, ?> principalNames = findByIndexNameSessionRepository.findByPrincipalName(loginName);

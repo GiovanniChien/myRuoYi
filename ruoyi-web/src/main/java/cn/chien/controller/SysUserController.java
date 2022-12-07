@@ -12,6 +12,7 @@ import cn.chien.domain.entity.SysRole;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.enums.BusinessType;
 import cn.chien.request.UserListPageQueryRequest;
+import cn.chien.request.UserRoleRequest;
 import cn.chien.security.auth.annotation.RequiresPermissions;
 import cn.chien.security.util.PrincipalUtil;
 import cn.chien.service.ISysConfigService;
@@ -20,19 +21,30 @@ import cn.chien.service.ISysPostService;
 import cn.chien.service.ISysRoleService;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.StringUtils;
+import cn.chien.utils.poi.ExcelUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -185,4 +197,56 @@ public class SysUserController extends BaseController {
         mmap.put("dept", deptService.selectDeptById(deptId));
         return prefix + "/deptTree";
     }
+    
+    @RequiresPermissions("system:user:resetPwd")
+    @PutMapping("/resetPwd/{userId}")
+    @ResponseBody
+    public AjaxResult resetPwd(@PathVariable("userId") Long userId) {
+        SysUser user = new SysUser(userId);
+        sysUserService.checkUserAllowed(user);
+        sysUserService.checkUserDataScope(userId);
+        user.setPassword(configService.selectConfigByKey("sys.user.initPassword"));
+        if (sysUserService.resetUserPwd(user) > 0) {
+            PrincipalUtil.forceLogout(sysUserService.selectUserById(userId).getLoginName());
+            return success();
+        }
+        return error();
+    }
+    
+    /**
+     * 进入授权角色页
+     */
+    @GetMapping("/authRole/{userId}")
+    public String authRole(@PathVariable("userId") Long userId, ModelMap mmap) {
+        SysUser user = sysUserService.selectUserById(userId);
+        // 获取用户所属的角色列表
+        List<SysRole> roles = roleService.selectRolesByUserId(userId);
+        mmap.put("user", user);
+        mmap.put("roles", SysUser.isAdmin(userId) ? roles
+                : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        return prefix + "/authRole";
+    }
+    
+    /**
+     * 用户授权角色
+     */
+    @RequiresPermissions("system:user:edit")
+    @BusinessLog(title = "用户管理", businessType = BusinessType.GRANT)
+    @PostMapping("/authRole/insertAuthRole")
+    @ResponseBody
+    public AjaxResult insertAuthRole(@RequestBody UserRoleRequest userRoleRequest) {
+        sysUserService.checkUserDataScope(userRoleRequest.getUserId());
+        sysUserService.insertUserAuth(userRoleRequest.getUserId(), userRoleRequest.getRoleIds());
+        PrincipalUtil.forceLogout(sysUserService.selectUserById(userRoleRequest.getUserId()).getLoginName());
+        return success();
+    }
+    
+    @RequiresPermissions("system:user:view")
+    @GetMapping(value = "/importTemplate")
+    @ResponseBody
+    public void importTemplate(HttpServletResponse response) throws IOException {
+        ExcelUtil<SysUser> util = new ExcelUtil<>(SysUser.class);
+        util.importTemplateExcel("用户数据", response);
+    }
+    
 }
