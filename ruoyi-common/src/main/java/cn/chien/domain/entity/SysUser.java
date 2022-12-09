@@ -2,6 +2,7 @@ package cn.chien.domain.entity;
 
 import cn.chien.annotation.Excel;
 import cn.chien.annotation.Excel.Type;
+import cn.chien.annotation.ExcelClass;
 import cn.chien.annotation.Excels;
 import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -25,6 +26,7 @@ import static cn.chien.annotation.Excel.*;
  */
 @TableName(value = "sys_user", excludeProperty = {"searchValue", "params", "parentId", "roleId", "dept", "roles",
         "roleIds", "postIds"})
+@ExcelClass(key = "loginName")
 public class SysUser extends BaseEntity {
     
     /**
@@ -130,17 +132,19 @@ public class SysUser extends BaseEntity {
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)})
     private SysDept dept;
     
-    @Excel(name = "角色列表", type = Type.IMPORT)
+    @Excel(name = "角色列表", type = Type.IMPORT, requireMerge = true)
     private List<SysRole> roles;
     
     /**
      * 角色组
      */
+    @Excel(name = "关联角色id(多id以 , 分割)", type = Type.IMPORT, width = 25)
     private Long[] roleIds;
     
     /**
      * 岗位组
      */
+    @Excel(name = "关联岗位id(多id以 , 分割)", type = Type.IMPORT, width = 25)
     private Long[] postIds;
     
     public SysUser() {

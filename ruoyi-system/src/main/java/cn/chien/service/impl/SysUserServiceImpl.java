@@ -16,18 +16,23 @@ import cn.chien.mapper.SysUserPostMapper;
 import cn.chien.mapper.SysUserRoleMapper;
 import cn.chien.request.UserListPageQueryRequest;
 import cn.chien.security.util.PrincipalUtil;
+import cn.chien.service.ISysConfigService;
 import cn.chien.service.ISysUserService;
 import cn.chien.util.PageUtil;
 import cn.chien.utils.StringUtils;
+import cn.chien.utils.bean.BeanValidators;
 import cn.chien.utils.spring.SpringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +43,7 @@ import java.util.stream.Collectors;
  * @date 2022/7/3
  */
 @Service
+@Slf4j
 public class SysUserServiceImpl implements ISysUserService {
     
     @Resource
@@ -54,6 +60,12 @@ public class SysUserServiceImpl implements ISysUserService {
     
     @Resource
     private SysUserRoleMapper userRoleMapper;
+    
+    @Autowired
+    private ISysConfigService configService;
+    
+    @Autowired
+    protected Validator validator;
     
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
@@ -268,7 +280,54 @@ public class SysUserServiceImpl implements ISysUserService {
     
     @Override
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName) {
-        return null;
+        if (StringUtils.isNull(userList) || userList.size() == 0) {
+            throw new ServiceException("导入用户数据不能为空！");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        String password = configService.selectConfigByKey("sys.user.initPassword");
+        for (SysUser user : userList) {
+            try {
+                // 验证是否存在这个用户
+                SysUser u = sysUserMapper.selectUserByLoginName(user.getLoginName());
+                if (StringUtils.isNull(u)) {
+                    BeanValidators.validateWithException(validator, user);
+                    user.setPassword(password);
+                    user.setCreateBy(operName);
+                    this.insertUser(user);
+                    successNum++;
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getLoginName())
+                            .append(" 导入成功");
+                } else if (isUpdateSupport) {
+                    BeanValidators.validateWithException(validator, user);
+                    checkUserAllowed(user);
+                    checkUserDataScope(user.getUserId());
+                    user.setUpdateBy(operName);
+                    this.updateUser(user);
+                    successNum++;
+                    successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getLoginName())
+                            .append(" 更新成功");
+                } else {
+                    failureNum++;
+                    failureMsg.append("<br/>").append(failureNum).append("、账号 ").append(user.getLoginName())
+                            .append(" 已存在");
+                }
+            } catch (Exception e) {
+                failureNum++;
+                String msg = "<br/>" + failureNum + "、账号 " + user.getLoginName() + " 导入失败：";
+                failureMsg.append(msg).append(e.getMessage());
+                log.error(msg, e);
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new ServiceException(failureMsg.toString());
+        } else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+        }
+        return successMsg.toString();
     }
     
     @Override
