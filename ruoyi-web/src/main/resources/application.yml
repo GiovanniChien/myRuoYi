@@ -115,8 +115,8 @@ ruoyi:
 aws:
   s3:
     enable: true
-    accessKey: eJcO8BxkpAgA7gWq
-    accessSecret: XIjuFwTYoHpTQzGLIGHJc7rJx46kZUyx
+    accessKey: 60fi5qVtzSyQDnvk
+    accessSecret: omUKGyKs7aAcztTChkCPO9IoN0icpQsY
     endpoint: http://localhost:9000
     region: us-east-1
     pathStyleAccess: true
