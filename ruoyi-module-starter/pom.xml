@@ -16,6 +16,7 @@
         <module>ruoyi-security-starter</module>
         <module>ruoyi-cache-starter</module>
         <module>ruoyi-security-thymeleaf-starter</module>
+        <module>ruoyi-poi-starter</module>
     </modules>
     
     <properties>

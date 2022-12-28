@@ -1,7 +1,6 @@
 package cn.chien.controller.base;
 
 import cn.chien.core.domain.AjaxResult;
-import cn.chien.domain.BaseEntity;
 import cn.chien.domain.entity.SysUser;
 import cn.chien.utils.DateUtils;
 import cn.chien.utils.ServletUtils;

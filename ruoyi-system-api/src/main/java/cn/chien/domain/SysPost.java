@@ -1,6 +1,6 @@
 package cn.chien.domain;
 
-import cn.chien.annotation.Excel;
+import cn.chien.poi.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import static cn.chien.annotation.Excel.ColumnType;
+import static cn.chien.poi.annotation.Excel.ColumnType;
 
 /**
  * 岗位表 sys_post

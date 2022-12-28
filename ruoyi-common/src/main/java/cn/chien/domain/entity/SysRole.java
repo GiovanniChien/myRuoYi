@@ -1,6 +1,6 @@
 package cn.chien.domain.entity;
 
-import cn.chien.annotation.Excel;
+import cn.chien.poi.annotation.Excel;
 import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 import java.util.Set;
 
-import static cn.chien.annotation.Excel.*;
+import static cn.chien.poi.annotation.Excel.*;
 
 /**
  * 角色表 sys_role

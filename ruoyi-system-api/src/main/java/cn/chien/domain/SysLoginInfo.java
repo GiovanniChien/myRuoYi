@@ -1,6 +1,6 @@
 package cn.chien.domain;
 
-import cn.chien.annotation.Excel;
+import cn.chien.poi.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;

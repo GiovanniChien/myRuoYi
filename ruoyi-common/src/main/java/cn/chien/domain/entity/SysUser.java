@@ -1,9 +1,9 @@
 package cn.chien.domain.entity;
 
-import cn.chien.annotation.Excel;
-import cn.chien.annotation.Excel.Type;
-import cn.chien.annotation.ExcelClass;
-import cn.chien.annotation.Excels;
+import cn.chien.poi.annotation.Excel;
+import cn.chien.poi.annotation.Excel.Type;
+import cn.chien.poi.annotation.ExcelClass;
+import cn.chien.poi.annotation.Excels;
 import cn.chien.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
-import static cn.chien.annotation.Excel.*;
+import static cn.chien.poi.annotation.Excel.*;
 
 /**
  * 用户对象 sys_user
@@ -132,7 +132,6 @@ public class SysUser extends BaseEntity {
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)})
     private SysDept dept;
     
-    @Excel(name = "角色列表", type = Type.IMPORT, requireMerge = true)
     private List<SysRole> roles;
     
     /**

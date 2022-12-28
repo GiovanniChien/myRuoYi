@@ -21,7 +21,7 @@ import cn.chien.service.ISysPostService;
 import cn.chien.service.ISysRoleService;
 import cn.chien.service.ISysUserService;
 import cn.chien.utils.StringUtils;
-import cn.chien.utils.poi.ExcelUtil;
+import cn.chien.poi.ExcelUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -252,6 +252,16 @@ public class SysUserController extends BaseController {
         List<SysUser> userList = util.importExcel(file.getInputStream());
         String message = sysUserService.importUser(userList, updateSupport, getLoginName());
         return AjaxResult.success(message);
+    }
+    
+    @BusinessLog(title = "用户管理", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("system:user:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public void export(UserListPageQueryRequest user, HttpServletResponse response) throws IOException {
+        List<SysUser> list = (List<SysUser>) sysUserService.selectUserList(user).getRows();
+        ExcelUtil<SysUser> util = new ExcelUtil<>(SysUser.class);
+        util.export( "用户数据", response, list);
     }
     
 }

@@ -1,6 +1,6 @@
 package cn.chien.domain.entity;
 
-import cn.chien.annotation.Excel;
+import cn.chien.poi.annotation.Excel;
 import cn.chien.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import static cn.chien.annotation.Excel.ColumnType;
+import static cn.chien.poi.annotation.Excel.ColumnType;
 
 /**
  * 字典类型表 sys_dict_type

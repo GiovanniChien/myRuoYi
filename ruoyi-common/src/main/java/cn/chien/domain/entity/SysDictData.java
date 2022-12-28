@@ -1,7 +1,7 @@
 package cn.chien.domain.entity;
 
-import cn.chien.annotation.Excel;
-import cn.chien.annotation.Excel.ColumnType;
+import cn.chien.poi.annotation.Excel;
+import cn.chien.poi.annotation.Excel.ColumnType;
 import cn.chien.constant.UserConstants;
 import cn.chien.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
