@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -258,7 +259,8 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")
     @ResponseBody
-    public void export(UserListPageQueryRequest user, HttpServletResponse response) throws IOException {
+    public void export(@RequestBody UserListPageQueryRequest user, HttpServletResponse response)
+            throws IOException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         List<SysUser> list = (List<SysUser>) sysUserService.selectUserList(user).getRows();
         ExcelUtil<SysUser> util = new ExcelUtil<>(SysUser.class);
         util.export( "用户数据", response, list);

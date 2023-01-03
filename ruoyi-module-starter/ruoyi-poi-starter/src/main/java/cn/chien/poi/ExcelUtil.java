@@ -160,8 +160,15 @@ public class ExcelUtil<T> {
                 .doWrite(new ArrayList<>());
     }
     
-    public void export(String sheetName, HttpServletResponse response, List<T> data) {
-    
+    public void export(String sheetName, HttpServletResponse response, List<T> data)
+            throws IOException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = encodingFilename(sheetName);
+        String encodeFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + encodeFileName);
+        response.setHeader("ajax-filename", encodeFileName);
+        export(sheetName, response.getOutputStream(), data);
     }
     
     public void export(String sheetName, OutputStream outputStream, List<T> data)

@@ -69,7 +69,13 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
     public TableDataInfo selectUserList(UserListPageQueryRequest user) {
-        IPage<SysUser> page = new Page<>(user.getPageNum(), user.getPageSize());
+        IPage<SysUser> page = null;
+        if (user.getPageNum() != null && user.getPageSize() != null) {
+            page = new Page<>(user.getPageNum(), user.getPageSize());
+        } else {
+            // 不分页
+            page = new Page<>(-1, -1);
+        }
         IPage<SysUser> pageRes = sysUserMapper.selectUserList(page, user);
         return PageUtil.getTableDataInfo(pageRes);
     }
