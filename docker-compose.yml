@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  ruoyi-web:
+    network_mode: "host"
+    #volumes:
+    ## 主机物理目录与容器目录的映射，若采用此方式挂载，则无法直接通过docker cp替换jar包
+    #- /home/app.jar:/app.jar
+    environment:
+    - SET_CONTAINER_TIMEZONE=true
+    - CONTAINER_TIMEZONE=Asia/Shanghai
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ruoyi-web

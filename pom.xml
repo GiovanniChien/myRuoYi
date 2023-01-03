@@ -32,6 +32,7 @@
         <kotlin.version>1.7.20</kotlin.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -96,7 +97,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <verion>0.2.0</verion>
+                            <version>0.2.0</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
