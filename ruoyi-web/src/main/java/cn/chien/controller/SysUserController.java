@@ -7,6 +7,7 @@ import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.page.TableDataInfo;
 import cn.chien.core.text.Convert;
+import cn.chien.domain.Ztree;
 import cn.chien.domain.entity.SysDept;
 import cn.chien.domain.entity.SysRole;
 import cn.chien.domain.entity.SysUser;
@@ -182,8 +183,8 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("system:user:list")
     @GetMapping("/deptTreeData")
     @ResponseBody
-    public AjaxResult deptTreeData() {
-        return AjaxResult.success(deptService.selectDeptTree(new SysDept()));
+    public List<Ztree> deptTreeData() {
+        return deptService.selectDeptTree(new SysDept());
     }
     
     @RequiresPermissions("system:user:list")

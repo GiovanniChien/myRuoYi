@@ -3,6 +3,7 @@ package cn.chien.service.impl;
 import cn.chien.annotation.DataScope;
 import cn.chien.constant.UserConstants;
 import cn.chien.core.auth.AuthThreadLocal;
+import cn.chien.core.page.TableDataInfo;
 import cn.chien.core.text.Convert;
 import cn.chien.domain.SysRoleDept;
 import cn.chien.domain.SysRoleMenu;
@@ -14,9 +15,14 @@ import cn.chien.mapper.SysRoleDeptMapper;
 import cn.chien.mapper.SysRoleMapper;
 import cn.chien.mapper.SysRoleMenuMapper;
 import cn.chien.mapper.SysUserRoleMapper;
+import cn.chien.request.RoleListPageQueryRequest;
 import cn.chien.service.ISysRoleService;
+import cn.chien.util.PageUtil;
 import cn.chien.utils.StringUtils;
 import cn.chien.utils.spring.SpringUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +61,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     @DataScope(deptAlias = "d")
-    public List<SysRole> selectRoleList(SysRole role) {
-        return roleMapper.selectRoleList(role);
+    public TableDataInfo selectRoleList(RoleListPageQueryRequest role) {
+        return PageUtil.queryPageList(role, page -> roleMapper.selectRoleList(page, role));
     }
     
     /**
@@ -105,7 +111,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public List<SysRole> selectRoleAll() {
-        return SpringUtils.getBean(this.getClass()).selectRoleList(new SysRole());
+        TableDataInfo tableDataInfo = SpringUtils.getBean(this.getClass()).selectRoleList(new RoleListPageQueryRequest());
+        return (List<SysRole>) tableDataInfo.getRows();
     }
     
     /**
@@ -257,9 +264,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public String checkRoleNameUnique(SysRole role) {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         SysRole info = roleMapper.checkRoleNameUnique(role.getRoleName());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue()) {
+        if (StringUtils.isNotNull(info) && info.getRoleId() != roleId) {
             return UserConstants.ROLE_NAME_NOT_UNIQUE;
         }
         return UserConstants.ROLE_NAME_UNIQUE;
@@ -273,9 +280,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public String checkRoleKeyUnique(SysRole role) {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
         SysRole info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue()) {
+        if (StringUtils.isNotNull(info) && info.getRoleId() != roleId) {
             return UserConstants.ROLE_KEY_NOT_UNIQUE;
         }
         return UserConstants.ROLE_KEY_UNIQUE;
@@ -301,9 +308,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void checkRoleDataScope(Long roleId) {
         if (!SysUser.isAdmin(AuthThreadLocal.getUserId())) {
-            SysRole role = new SysRole();
+            RoleListPageQueryRequest role = new RoleListPageQueryRequest();
             role.setRoleId(roleId);
-            List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
+            List<SysRole> roles = (List<SysRole>) SpringUtils.getAopProxy(this).selectRoleList(role).getRows();
             if (StringUtils.isEmpty(roles)) {
                 throw new ServiceException("没有权限访问角色数据！");
             }

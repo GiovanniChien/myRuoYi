@@ -245,6 +245,15 @@ var table = {
                     // 非单个禁用
                     $('#' + toolbar + ' .single').toggleClass('disabled', rows.length != 1);
                 });
+                $(optionsIds).on('load-error.bs.table', function (event, status, e) {
+                    let json = e.responseJSON;
+                    if (json) {
+                        let errorCode = json.errorCode;
+                        if (errorCode === 'user.session.timeout' || errorCode === 'session.multi.login') {
+                            location.reload();
+                        }
+                    }
+                });
                 // 图片预览事件
                 $(optionsIds).off("click").on("click", '.img-circle', function () {
                     var src = $(this).attr('src');
@@ -1469,26 +1478,21 @@ var table = {
                     view: options.view,
                     data: options.data
                 };
-                $.get(options.url, function (res) {
+                $.get(options.url, function (data) {
                     var treeId = $("#treeId").val();
-                    if (res.code === web_status.SUCCESS) {
-                        tree = $.fn.zTree.init($("#" + options.id), setting, res.data);
-                        $._tree = tree;
-                        for (var i = 0; i < options.expandLevel; i++) {
-                            var nodes = tree.getNodesByParam("level", i);
-                            for (var j = 0; j < nodes.length; j++) {
-                                tree.expandNode(nodes[j], true, false, false);
-                            }
+                    tree = $.fn.zTree.init($("#" + options.id), setting, data);
+                    $._tree = tree;
+                    for (var i = 0; i < options.expandLevel; i++) {
+                        var nodes = tree.getNodesByParam("level", i);
+                        for (var j = 0; j < nodes.length; j++) {
+                            tree.expandNode(nodes[j], true, false, false);
                         }
-                        var node = tree.getNodesByParam("id", treeId, null)[0];
-                        $.tree.selectByIdName(treeId, node);
-                        // 回调tree方法
-                        if (typeof (options.callBack) === "function") {
-                            options.callBack(tree);
-                        }
-                    } else {
-                        $.modal.alertWarning(res.msg);
-                        $.fn.zTree.destroy(treeId);
+                    }
+                    var node = tree.getNodesByParam("id", treeId, null)[0];
+                    $.tree.selectByIdName(treeId, node);
+                    // 回调tree方法
+                    if (typeof (options.callBack) === "function") {
+                        options.callBack(tree);
                     }
                 });
             },
@@ -1569,9 +1573,11 @@ var table = {
             getCheckedNodes: function (column) {
                 var _column = $.common.isEmpty(column) ? "id" : column;
                 var nodes = $._tree.getCheckedNodes(true);
-                return $.map(nodes, function (row) {
-                    return row[_column];
-                }).join();
+                let result = [];
+                $.each(nodes, (index, node) => {
+                    result.push(node[_column]);
+                })
+                return result;
             },
             // 不允许根父节点选择
             notAllowParents: function (_tree) {

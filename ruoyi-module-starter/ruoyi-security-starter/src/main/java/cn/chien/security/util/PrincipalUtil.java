@@ -1,7 +1,9 @@
 package cn.chien.security.util;
 
 import cn.chien.constant.UserConstants;
+import cn.chien.domain.entity.SysUser;
 import cn.chien.security.access.SecurityUser;
+import cn.chien.service.ISysUserService;
 import cn.chien.utils.ServletUtils;
 import cn.chien.utils.StringUtils;
 import cn.chien.utils.spring.SpringUtils;
@@ -19,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author qiandq3
@@ -29,6 +32,8 @@ public final class PrincipalUtil {
     private static final String PART_DIVIDER_TOKEN = ":";
     
     private static final String WILDCARD_TOKEN = "*";
+    
+    private static final ISysUserService userService = SpringUtils.getBean(ISysUserService.class);
     
     public static boolean hasLogin() {
         Authentication authentication = getAuthentication();
@@ -123,6 +128,17 @@ public final class PrincipalUtil {
             }
         }
         return false;
+    }
+    
+    public static void forceLogoutByRoleId(Long roleId) {
+        List<SysUser> sysUsers = userService.selectUsersByRoleId(roleId);
+        if (CollectionUtils.isEmpty(sysUsers)) {
+            return;
+        }
+        Set<String> loginNames = sysUsers.stream().map(SysUser::getLoginName).collect(Collectors.toSet());
+        for (String loginName : loginNames) {
+            forceLogout(loginName);
+        }
     }
     
     public static void forceLogout(String loginName) {

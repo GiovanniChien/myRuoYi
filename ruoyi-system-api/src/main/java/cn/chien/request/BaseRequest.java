@@ -3,6 +3,8 @@ package cn.chien.request;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qiandq3
@@ -11,6 +13,13 @@ import java.io.Serializable;
 @Data
 public class BaseRequest implements Serializable {
     
-    private String dataScope;
+    private Map<String, Object> params;
+    
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
 
 }

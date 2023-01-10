@@ -129,7 +129,7 @@ public class DataScopeAspect {
                 if (params instanceof BaseEntity baseEntity) {
                     baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
                 } else if (params instanceof BaseRequest baseRequest) {
-                    baseRequest.setDataScope(" AND (" + sqlString.substring(4) + ")");
+                    baseRequest.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
                 }
             }
         }
@@ -144,7 +144,7 @@ public class DataScopeAspect {
             if (arg instanceof BaseEntity baseEntity) {
                 baseEntity.getParams().put(DATA_SCOPE, "");
             } else if (arg instanceof BaseRequest baseRequest) {
-                baseRequest.setDataScope(null);
+                baseRequest.getParams().put(DATA_SCOPE, null);
             }
         }
     }

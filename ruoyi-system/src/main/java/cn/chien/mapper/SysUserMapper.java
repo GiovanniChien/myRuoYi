@@ -125,4 +125,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return 结果
      */
     SysUser checkEmailUnique(String email);
+    
+    List<SysUser> selectUsersByRoleId(Long roleId);
 }

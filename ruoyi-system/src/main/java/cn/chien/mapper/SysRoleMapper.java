@@ -1,7 +1,10 @@
 package cn.chien.mapper;
 
 import cn.chien.domain.entity.SysRole;
+import cn.chien.request.RoleListPageQueryRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * @param role 角色信息
      * @return 角色数据集合信息
      */
-    List<SysRole> selectRoleList(SysRole role);
+    IPage<SysRole> selectRoleList(IPage<SysRole> page, @Param("role") RoleListPageQueryRequest role);
     
     /**
      * 根据用户ID查询角色

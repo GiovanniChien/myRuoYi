@@ -154,18 +154,20 @@
 			var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
 			var remark = $("input[name='remark']").val();
 			var menuIds = $.tree.getCheckedNodes();
-			$.ajax({
-				cache : true,
-				type : "POST",
-				url : ctx + "system/role/add",
-				data : {
+			let data = {
 					"roleName": roleName,
 					"roleKey": roleKey,
 					"roleSort": roleSort,
 					"status": status,
 					"remark": remark,
 					"menuIds": menuIds
-				},
+				};
+			$.ajax({
+				cache : true,
+				type : "POST",
+				url : ctx + "system/role/add",
+				contentType: 'application/json',
+				data : JSON.stringify(data),
 				async : false,
 				error : function(request) {
 					$.modal.alertError("系统错误");

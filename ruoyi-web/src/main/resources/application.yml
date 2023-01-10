@@ -6,7 +6,7 @@ server:
 
 logging:
   level:
-    root: info
+    root: debug
 # Spring配置
 spring:
   # 模板引擎

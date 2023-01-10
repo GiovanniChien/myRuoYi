@@ -1,7 +1,9 @@
 package cn.chien.service;
 
+import cn.chien.core.page.TableDataInfo;
 import cn.chien.domain.SysUserRole;
 import cn.chien.domain.entity.SysRole;
+import cn.chien.request.RoleListPageQueryRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -16,10 +18,10 @@ public interface ISysRoleService {
     /**
      * 根据条件分页查询角色数据
      *
-     * @param role 角色信息
+     * @param roleListPageQueryRequest 角色信息
      * @return 角色数据集合信息
      */
-    public List<SysRole> selectRoleList(SysRole role);
+    TableDataInfo selectRoleList(RoleListPageQueryRequest roleListPageQueryRequest);
     
     /**
      * 根据用户ID查询角色列表

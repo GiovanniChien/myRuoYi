@@ -68,6 +68,14 @@ public interface ISysUserService
      * @return 用户对象信息
      */
     public SysUser selectUserById(Long userId);
+    
+    /**
+     * 通过roleId查询所有关联的用户
+     *
+     * @param roleId 角色ID
+     * @return 用户对象列表
+     */
+    List<SysUser> selectUsersByRoleId(Long roleId);
 
     /**
      * 通过用户ID查询用户和角色关联

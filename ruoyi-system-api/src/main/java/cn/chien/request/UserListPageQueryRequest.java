@@ -1,5 +1,6 @@
 package cn.chien.request;
 
+import cn.chien.domain.entity.SysUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +12,7 @@ import java.util.Date;
  * @date 2022/11/25
  */
 @Data
-public class UserListPageQueryRequest extends BasePageRequest {
+public class UserListPageQueryRequest extends BasePageRequest<SysUser> {
     
     private Long userId;
     
@@ -20,14 +21,6 @@ public class UserListPageQueryRequest extends BasePageRequest {
     private String status;
     
     private String phonenumber;
-    
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date beginTime;
-    
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endTime;
     
     private Long deptId;
 }

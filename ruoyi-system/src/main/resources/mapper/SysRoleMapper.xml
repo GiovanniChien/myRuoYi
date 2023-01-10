@@ -47,34 +47,34 @@
         from sys_role r
     </sql>
     
-    <select id="selectRoleList" parameterType="cn.chien.domain.entity.SysRole" resultMap="SysRoleResult">
+    <select id="selectRoleList" parameterType="cn.chien.request.RoleListPageQueryRequest" resultMap="SysRoleResult">
         <include refid="selectRoleContactVo"/>
         where r.del_flag = '0'
-        <if test="roleId != null and roleId != 0">
-            AND r.role_id = #{roleId}
+        <if test="role.roleId != null and role.roleId != 0">
+            AND r.role_id = #{role.roleId}
         </if>
-        <if test="roleName != null and roleName != ''">
-            AND r.role_name like concat('%', #{roleName}, '%')
+        <if test="role.roleName != null and role.roleName != ''">
+            AND r.role_name like concat('%', #{role.roleName}, '%')
         </if>
-        <if test="status != null and status != ''">
-            AND r.status = #{status}
+        <if test="role.status != null and role.status != ''">
+            AND r.status = #{role.status}
         </if>
-        <if test="roleKey != null and roleKey != ''">
-            AND r.role_key like concat('%', #{roleKey}, '%')
+        <if test="role.roleKey != null and role.roleKey != ''">
+            AND r.role_key like concat('%', #{role.roleKey}, '%')
         </if>
-        <if test="dataScope != null and dataScope != ''">
-            AND r.data_scope = #{dataScope}
+        <if test="role.dataScope != null and role.dataScope != ''">
+            AND r.data_scope = #{role.dataScope}
         </if>
-        <if test="params.beginTime != null and params.beginTime != ''">
+        <if test="role.beginTime != null">
             <!-- 开始时间检索 -->
-            and date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            and r.create_time &gt;= #{role.beginTime}
         </if>
-        <if test="params.endTime != null and params.endTime != ''">
+        <if test="role.endTime != null">
             <!-- 结束时间检索 -->
-            and date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            and r.create_time &lt;= #{role.endTime}
         </if>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        ${role.params.dataScope}
     </select>
     
     <select id="selectRolesByUserId" parameterType="Long" resultMap="SysRoleResult">
