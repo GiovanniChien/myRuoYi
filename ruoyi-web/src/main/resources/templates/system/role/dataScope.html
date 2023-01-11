@@ -52,7 +52,7 @@
 	<script type="text/javascript">
 	
 	    $(function() {
-			var url = ctx + "system/dept/roleDeptTreeData?roleId=" + $("#roleId").val();
+			var url = ctx + "system/role/deptTreeData?roleId=" + $("#roleId").val();
 			var options = {
 				id: "deptTrees",
 		        url: url,
@@ -102,17 +102,15 @@
 				cache : true,
 				type : "POST",
 				url : ctx + "system/role/authDataScope",
-				data : {
+				contentType: 'application/json',
+				data : JSON.stringify({
 					"roleId": roleId,
 					"roleName": roleName,
 					"roleKey": roleKey,
 					"dataScope": dataScope,
 			        "deptIds": deptIds
-				},
+				}),
 				async : false,
-				error : function(request) {
-					$.modal.alertError("系统错误");
-				},
 				success : function(data) {
 					$.operate.successCallback(data);
 				}

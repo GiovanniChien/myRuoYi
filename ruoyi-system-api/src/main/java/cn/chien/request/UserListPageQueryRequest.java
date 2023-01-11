@@ -23,4 +23,6 @@ public class UserListPageQueryRequest extends BasePageRequest<SysUser> {
     private String phonenumber;
     
     private Long deptId;
+    
+    private Long roleId;
 }

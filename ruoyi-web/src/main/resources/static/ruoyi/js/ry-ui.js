@@ -1260,10 +1260,15 @@ var table = {
                 var config = {
                     url: url,
                     type: "post",
+                    contentType: 'application/json',
                     dataType: "json",
-                    data: data,
-                    beforeSend: function () {
+                    data: JSON.stringify(data),
+                    beforeSend: function (xhr) {
                         $.modal.loading("正在处理中，请稍候...");
+                        let csrfToken = JSON.parse(window.localStorage.getItem('_csrf'));
+                        if (csrfToken) {
+                            xhr.setRequestHeader(csrfToken.headerName, csrfToken.token);
+                        }
                         $.modal.disable();
                     },
                     success: function (result) {

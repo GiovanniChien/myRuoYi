@@ -87,7 +87,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
     public List<Ztree> roleDeptTreeData(SysRole role) {
         Long roleId = role.getRoleId();
         List<Ztree> ztrees = new ArrayList<Ztree>();
-        List<SysDept> deptList = SpringUtils.getAopProxy(this).selectDeptList(new SysDept());
+        List<SysDept> deptList = SpringUtils.getBean(this.getClass()).selectDeptList(new SysDept());
         if (StringUtils.isNotNull(roleId)) {
             List<String> roleDeptList = deptMapper.selectRoleDeptTree(roleId);
             ztrees = initZtree(deptList, roleDeptList);
@@ -289,7 +289,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
         if (!SysUser.isAdmin(AuthThreadLocal.getUserId())) {
             SysDept dept = new SysDept();
             dept.setDeptId(deptId);
-            List<SysDept> depts = SpringUtils.getAopProxy(this).selectDeptList(dept);
+            List<SysDept> depts = SpringUtils.getBean(this.getClass()).selectDeptList(dept);
             if (StringUtils.isEmpty(depts)) {
                 throw new ServiceException("没有权限访问部门数据！");
             }

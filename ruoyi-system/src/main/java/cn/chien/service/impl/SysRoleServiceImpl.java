@@ -20,9 +20,6 @@ import cn.chien.service.ISysRoleService;
 import cn.chien.util.PageUtil;
 import cn.chien.utils.StringUtils;
 import cn.chien.utils.spring.SpringUtils;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -310,7 +307,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         if (!SysUser.isAdmin(AuthThreadLocal.getUserId())) {
             RoleListPageQueryRequest role = new RoleListPageQueryRequest();
             role.setRoleId(roleId);
-            List<SysRole> roles = (List<SysRole>) SpringUtils.getAopProxy(this).selectRoleList(role).getRows();
+            List<SysRole> roles = (List<SysRole>) SpringUtils.getBean(this.getClass()).selectRoleList(role).getRows();
             if (StringUtils.isEmpty(roles)) {
                 throw new ServiceException("没有权限访问角色数据！");
             }
@@ -370,11 +367,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
      * @return 结果
      */
     @Override
-    public int insertAuthUsers(Long roleId, String userIds) {
-        Long[] users = Convert.toLongArray(userIds);
+    public int insertAuthUsers(Long roleId, Long[] userIds) {
         // 新增用户与角色管理
         List<SysUserRole> list = new ArrayList<SysUserRole>();
-        for (Long userId : users) {
+        for (Long userId : userIds) {
             SysUserRole ur = new SysUserRole();
             ur.setUserId(userId);
             ur.setRoleId(roleId);

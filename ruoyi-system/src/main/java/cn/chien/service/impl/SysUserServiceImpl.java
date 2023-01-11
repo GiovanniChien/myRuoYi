@@ -74,14 +74,14 @@ public class SysUserServiceImpl implements ISysUserService {
     
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectAllocatedList(SysUser user) {
-        return null;
+    public TableDataInfo selectAllocatedList(UserListPageQueryRequest user) {
+        return PageUtil.queryPageList(user, page -> sysUserMapper.selectAllocatedList(page, user));
     }
     
     @Override
     @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectUnallocatedList(SysUser user) {
-        return null;
+    public TableDataInfo selectUnallocatedList(UserListPageQueryRequest user) {
+        return PageUtil.queryPageList(user, page -> sysUserMapper.selectUnallocatedList(page, user));
     }
     
     @Override

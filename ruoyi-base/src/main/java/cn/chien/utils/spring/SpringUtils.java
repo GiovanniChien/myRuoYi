@@ -116,18 +116,6 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
     }
 
     /**
-     * 获取aop代理对象
-     * 
-     * @param invoker
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T getAopProxy(T invoker)
-    {
-        return (T) AopContext.currentProxy();
-    }
-
-    /**
      * 获取当前的环境配置，无配置返回null
      *
      * @return 当前的环境配置
