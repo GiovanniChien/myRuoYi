@@ -1,4 +1,4 @@
-package cn.chien.controller.base;
+package cn.chien.core.controller;
 
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.domain.entity.SysUser;

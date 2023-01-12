@@ -26,6 +26,7 @@ public class StaticResourceSecurityConfiguration extends WebSecurityConfigurerAd
         http.requestMatchers().antMatchers(arrs)
                 .and().cors()
                 .and().addFilterAfter(new StaticResourceFilter(), CorsFilter.class);
+        http.headers().frameOptions().disable();
     }
 
     @Override

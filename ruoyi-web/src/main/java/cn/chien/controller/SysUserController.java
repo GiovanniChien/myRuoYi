@@ -2,7 +2,7 @@ package cn.chien.controller;
 
 import cn.chien.annotation.BusinessLog;
 import cn.chien.constant.UserConstants;
-import cn.chien.controller.base.BaseController;
+import cn.chien.core.controller.BaseController;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.page.TableDataInfo;

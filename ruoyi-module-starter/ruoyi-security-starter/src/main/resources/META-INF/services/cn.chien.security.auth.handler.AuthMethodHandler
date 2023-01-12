@@ -1,1 +1,2 @@
 cn.chien.security.auth.handler.RequiresPermissionsHandler
+cn.chien.security.auth.handler.RequiresRolesHandler

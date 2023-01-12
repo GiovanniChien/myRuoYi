@@ -1,6 +1,6 @@
 package cn.chien.controller;
 
-import cn.chien.controller.base.BaseController;
+import cn.chien.core.controller.BaseController;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.text.Convert;

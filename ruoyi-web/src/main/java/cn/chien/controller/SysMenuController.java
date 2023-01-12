@@ -1,6 +1,6 @@
 package cn.chien.controller;
 
-import cn.chien.controller.base.BaseController;
+import cn.chien.core.controller.BaseController;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.domain.Ztree;
 import cn.chien.domain.entity.SysRole;

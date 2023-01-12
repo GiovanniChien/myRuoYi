@@ -154,4 +154,21 @@ public final class PrincipalUtil {
             }
         }
     }
+    
+    public static boolean hasRole(String role) {
+        Authentication authentication = getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof SecurityUser securityUser) {
+            Collection<GrantedAuthority> authorities = securityUser.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (role.equals(authority.getAuthority())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

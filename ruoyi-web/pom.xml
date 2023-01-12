@@ -37,6 +37,11 @@
             <artifactId>ruoyi-system</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.chien</groupId>
+            <artifactId>ruoyi-generator-starter</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     
     <build>

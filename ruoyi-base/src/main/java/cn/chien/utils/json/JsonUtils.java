@@ -53,6 +53,9 @@ public final class JsonUtils {
     }
     
     public static Map<String, Object> readValueAsMap(String jsonStr) {
+        if (jsonStr == null) {
+            return null;
+        }
         try {
             return DEFAULT_OBJECT_MAPPER.readValue(jsonStr, new MapTypeReference());
         }

@@ -2,14 +2,13 @@ package cn.chien.controller;
 
 import cn.chien.annotation.BusinessLog;
 import cn.chien.constant.UserConstants;
-import cn.chien.controller.base.BaseController;
+import cn.chien.core.controller.BaseController;
 import cn.chien.core.auth.AuthThreadLocal;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.core.page.TableDataInfo;
 import cn.chien.domain.SysUserRole;
 import cn.chien.domain.Ztree;
 import cn.chien.domain.entity.SysRole;
-import cn.chien.domain.entity.SysUser;
 import cn.chien.enums.BusinessType;
 import cn.chien.poi.ExcelUtil;
 import cn.chien.request.RoleListPageQueryRequest;
