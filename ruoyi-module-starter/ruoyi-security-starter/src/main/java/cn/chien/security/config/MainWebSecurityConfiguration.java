@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 
@@ -69,7 +70,10 @@ public class MainWebSecurityConfiguration {
                 })
                 .servletApi(Customizer.withDefaults())
                 .cors(Customizer.withDefaults())
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher(requestMappingHandler)))
+                .csrf(httpSecurityCsrfConfigurer -> {
+                    httpSecurityCsrfConfigurer.requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher(requestMappingHandler))
+                            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler());
+                })
                 .rememberMe(rememberMeCustomizer -> {
                     rememberMeCustomizer.rememberMeParameter("rememberMe")
                             .tokenRepository(persistentTokenRepository())

@@ -1,18 +1,17 @@
 package cn.chien.security.config;
 
-import cn.chien.security.CsrfSecurityRequestMatcher;
 import cn.chien.security.SecurityProperties;
 import cn.chien.security.access.FormLoginAuthenticationFailureHandler;
 import cn.chien.security.access.FormLoginAuthenticationProvider;
 import cn.chien.security.access.FormLoginAuthenticationSuccessHandler;
 import cn.chien.security.filter.VerificationCodeFilter;
-import cn.chien.security.handler.RequestMappingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -48,9 +47,6 @@ public class FormLoginAutoConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
     
-    @Autowired
-    private RequestMappingHandler requestMappingHandler;
-    
     @Bean(name = "formLoginSecurityFilterChain")
     @Order(10)
     public SecurityFilterChain formLoginSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -75,7 +71,7 @@ public class FormLoginAutoConfiguration {
                 .addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(Customizer.withDefaults())
                 .cors(Customizer.withDefaults())
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.requireCsrfProtectionMatcher(new CsrfSecurityRequestMatcher(requestMappingHandler)))
+                .csrf(AbstractHttpConfigurer::disable)
                 .rememberMe((rememberMe) -> {
                     rememberMe.rememberMeParameter("rememberMe")
                             .tokenRepository(persistentTokenRepository())
