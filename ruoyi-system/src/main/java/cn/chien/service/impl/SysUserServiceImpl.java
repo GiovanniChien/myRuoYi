@@ -23,16 +23,14 @@ import cn.chien.utils.StringUtils;
 import cn.chien.utils.bean.BeanValidators;
 import cn.chien.utils.spring.SpringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
-import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 

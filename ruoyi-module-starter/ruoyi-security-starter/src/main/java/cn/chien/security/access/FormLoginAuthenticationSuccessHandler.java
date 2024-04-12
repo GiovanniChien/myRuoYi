@@ -14,9 +14,9 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
         CsrfToken csrfToken = repository.generateToken(request);
         repository.saveToken(csrfToken, request, response);
         resp.put("_csrf", csrfToken);
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         PrintWriter pw = response.getWriter();
         objectMapper.writeValue(pw, AjaxResult.success(resp));
         pw.flush();

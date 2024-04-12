@@ -3,7 +3,7 @@ package cn.chien.generator.domain;
 import cn.chien.domain.BaseEntity;
 import cn.chien.utils.StringUtils;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 代码生成业务字段表 gen_table_column

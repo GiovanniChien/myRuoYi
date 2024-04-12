@@ -4,7 +4,7 @@ import cn.chien.annotation.SkipSessionCheck;
 import cn.chien.security.handler.RequestMappingHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashSet;
 

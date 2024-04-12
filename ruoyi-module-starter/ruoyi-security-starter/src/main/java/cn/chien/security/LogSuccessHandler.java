@@ -11,8 +11,8 @@ import cn.chien.utils.MessageUtils;
 import cn.chien.utils.spring.SpringUtils;
 import org.springframework.security.core.Authentication;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author qiandq3

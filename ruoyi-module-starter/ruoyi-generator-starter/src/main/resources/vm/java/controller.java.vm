@@ -18,7 +18,7 @@ import ${packageName}.service.I${ClassName}Service;
 import cn.chien.core.controller.BaseController;
 import cn.chien.core.domain.AjaxResult;
 import cn.chien.poi.ExcelUtil;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 #if($table.crud || $table.sub)
 import cn.chien.core.page.TableDataInfo;
 #elseif($table.tree)

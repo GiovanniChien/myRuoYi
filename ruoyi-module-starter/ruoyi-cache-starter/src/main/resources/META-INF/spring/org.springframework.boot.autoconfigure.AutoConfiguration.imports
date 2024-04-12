@@ -1,0 +1,2 @@
+cn.chien.cache.caffeine.CaffeineConfiguration
+cn.chien.cache.redis.RedisConfiguration

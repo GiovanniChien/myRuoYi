@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-cn.chien.cache.caffeine.CaffeineConfiguration,\
-cn.chien.cache.redis.RedisConfiguration

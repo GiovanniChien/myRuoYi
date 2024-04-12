@@ -85,7 +85,7 @@ public class LettuceConnectionFactoryBuilder {
 
     private void applyProperties(
             LettuceClientConfiguration.LettuceClientConfigurationBuilder builder) {
-        if (properties.isSsl()) {
+        if (properties.getSsl().isEnabled()) {
             builder.useSsl();
         }
         if (properties.getTimeout() != null) {

@@ -8,10 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.session.MapSession;
 import org.springframework.session.MapSessionRepository;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 
+import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EnableSpringHttpSession
 public class MapSessionConfiguration {
 
-    private static final Integer maxInactiveInterval = 1800;
+    private static final Duration maxInactiveInterval = MapSession.DEFAULT_MAX_INACTIVE_INTERVAL;
 
     private SecurityProperties securityProperties;
 
@@ -36,9 +38,9 @@ public class MapSessionConfiguration {
     @Bean
     @ConditionalOnMissingBean({SessionRepository.class})
     public MapSessionRepository sessionRepository() {
-        MapSessionRepository sessionRepository = new MapSessionRepository(new ConcurrentHashMap());
+        MapSessionRepository sessionRepository = new MapSessionRepository(new ConcurrentHashMap<>());
         sessionRepository.setDefaultMaxInactiveInterval(
-                securityProperties.getSession().getExpireTime() == null ? maxInactiveInterval : securityProperties.getSession().getExpireTime() * 60);
+                securityProperties.getSession().getExpireTime() == null ? maxInactiveInterval : Duration.ofMinutes(securityProperties.getSession().getExpireTime()));
         return sessionRepository;
     }
 
